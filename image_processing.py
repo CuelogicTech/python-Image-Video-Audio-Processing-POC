@@ -34,21 +34,25 @@ class ImageProcessing(object):
 
 		faces = face_cascade.detectMultiScale(gray, 1.2, 3, minSize=(30, 30))
 
-		print "Found {0} faces!".format(len(faces))
-
 		# Draw a rectangle around the faces
 		for (x, y, w, h) in faces:
 			cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-		cv2.imshow('img',img)
+		#cv2.w('img',img)
+		imageFilename = os.path.basename(self.imagePath)
+		
+		cv2.imwrite('images/face_detect/'+imageFilename, img)
 		#cv2.waitKey(0)
 		#cv2.destroyAllWindows()
-
+		face_detect = {}
+		face_detect["face_count"] = len(faces)
+		face_detect["result_image"] = 'images/face_detect/'+imageFilename
+		return face_detect
 
 	def extract_text(self):
 
 		text = image_to_string(self.imgOpen)
-		print text
+		return text
 
 	def getImageColor(self):
 
@@ -68,27 +72,9 @@ class ImageProcessing(object):
 			#plt.xlim([0,256])
 		#plt.show()
 		#B G R
-		for bgr_code in colors.keys():
-			#print bgr_code
-			#print "--===>>>", bgr_code[0]
-			#print "--===>>>", bgr_code[1]
-			#print "--===>>>", bgr_code[2]
-			if bgr_code[2] > 150 and  bgr_code[1] < 50 and bgr_code[0] < 50:
-				print "red"
-			elif bgr_code[2] > 200 and bgr_code[1] > 200 and bgr_code[0] < 100:
-				print "yellow"
-			elif bgr_code[2] > 200 and bgr_code[1] > 100 and bgr_code[1] < 200 and bgr_code[0] <50:
-				print "orange"
-			elif bgr_code[2] < 50 and bgr_code[1] > 150 and bgr_code[0] < 50:
-				print "green"
-			elif bgr_code[2]< 50 and bgr_code[1] < 50 and bgr_code[0] > 150:
-				print "blue"
-			elif bgr_code[2] > 240 and bgr_code[2] > 240 and bgr_code[2] > 240:
-				print "blue"
 
-			#exit()
-			#if bgr_code[0]
-
+		return self.getColorPercentage(colors)
+		
 	def checkDuplicateImage(self, compare_path):
 		
 		# load the images
@@ -99,6 +85,7 @@ class ImageProcessing(object):
 
 		originImageSize = self.imgOpen
 
+		duplicateImages = []
 		for fname in os.listdir(compare_path):
     
 			path = os.path.join(compare_path, fname)
@@ -114,36 +101,78 @@ class ImageProcessing(object):
 				imagesGreyScale = cv2.cvtColor(imagesRead, cv2.COLOR_BGR2GRAY)
 
 				if cmp(originImageSize.size, imageSize.size) == 0:
-					self.compare_images(originalGreyScale, imagesGreyScale, "Original vs. Contrast")
+					ssimResult = self.compare_images(originalGreyScale, imagesGreyScale)
+					if ssimResult >= 0.99:
+						duplicateImages.append(compare_path+"/"+fname)
 
-	def compare_images(self,imageA, imageB, title):
+		return duplicateImages
+
+	def compare_images(self,imageA, imageB):
+
 		# compute the mean squared error and structural similarity
 		# index for the images
 		ssimResult = ssim(imageA, imageB)
- 
-		# setup the figure
-		fig = plt.figure(title)
+		return ssimResult 
 
-		if ssimResult >= 0.99:
-			plt.suptitle("SSIM: %.2f" % (ssimResult))
- 
-			# show first image
-			ax = fig.add_subplot(1, 2, 1)
-			plt.imshow(imageA, cmap = plt.cm.gray)
-			plt.axis("off")
- 
-			# show the second image
-			ax = fig.add_subplot(1, 2, 2)
-			plt.imshow(imageB, cmap = plt.cm.gray)
-			plt.axis("off")
- 
-			# show the images
-			plt.show()
+	def getColorPercentage(self, colors):
+
+		red_color = yellow_color = orange_color = green_color = blue_color = white_color = pink_color = black_color = grey_color = purple_color = brown_color = 0
+
+		for bgr_code in colors.keys():
+			
+			if bgr_code[2] > 150 and  bgr_code[1] < 50 and bgr_code[0] < 50:
+				red_color += 1
+			elif bgr_code[2] > 200 and bgr_code[1] > 200 and bgr_code[0] < 100:
+				yellow_color += 1
+			elif bgr_code[2] > 200 and bgr_code[1] > 100 and bgr_code[1] < 200 and bgr_code[0] <50:
+				orange_color += 1
+			elif bgr_code[2] < 50 and bgr_code[1] > 150 and bgr_code[0] < 50:
+				green_color += 1
+			elif bgr_code[2]< 50 and bgr_code[1] < 50 and bgr_code[0] > 150:
+				blue_color += 1
+			elif bgr_code[2] > 240 and bgr_code[1] > 240 and bgr_code[0] > 240:
+				white_color += 1
+			elif bgr_code[2] < 40 and bgr_code[1] < 40 and bgr_code[0] < 40:
+				black_color += 1
+			elif bgr_code[2] > 150 and bgr_code[1] < 50 and bgr_code[0] > 150:
+				pink_color += 1
+			elif bgr_code[2] > 40 and bgr_code[2] < 240 and bgr_code[1] > 40 and bgr_code[1] < 240 and bgr_code[0] > 40 and bgr_code[0] < 240:
+				grey_color += 1
+			elif bgr_code[2] >80 and bgr_code[2] < 120 and bgr_code[1] > 0 and bgr_code[1] < 110 and bgr_code[0] > 180:
+				purple_color += 1
+			elif bgr_code[2] > 70 and bgr_code[2] < 120 and bgr_code[1] < 50 and bgr_code[0] < 50:
+				brown_color += 1
+
+
+		total_color = red_color + yellow_color + orange_color + green_color + blue_color + white_color + pink_color + black_color + grey_color + purple_color + brown_color
+
+		clorsPercentage = {}
+		clorsPercentage["red"] = round((red_color / float(total_color)) * 100, 4)
+		clorsPercentage["yellow"] = round((yellow_color / float(total_color)) * 100, 4)
+		clorsPercentage["orange"] = round((orange_color / float(total_color)) * 100, 4)
+		clorsPercentage["green"] = round((green_color / float(total_color)) * 100, 4)
+		clorsPercentage["blue"] = round((blue_color / float(total_color)) * 100, 4)
+		clorsPercentage["white"] = round((white_color / float(total_color)) * 100, 4)
+		clorsPercentage["pink"] = round((pink_color / float(total_color)) * 100, 4)
+		clorsPercentage["black"] = round((black_color / float(total_color)) * 100, 4)
+		clorsPercentage["grey"] = round((grey_color / float(total_color)) * 100, 4)
+		clorsPercentage["purple"] = round((purple_color / float(total_color)) * 100, 4)
+		clorsPercentage["brown"] = round((brown_color / float(total_color)) * 100, 4)
+
+		return clorsPercentage
 
 
 imagePath = sys.argv[1]
 imageProcess = ImageProcessing(imagePath)
-imageProcess.faceDetection()
-imageProcess.extract_text()
-imageProcess.getImageColor()
-imageProcess.checkDuplicateImage("images/test-images")
+print "Face Detection: ", imageProcess.faceDetection()
+print "\n==================================================================================================\n"
+
+print "Text: ", imageProcess.extract_text()
+
+print "\n==================================================================================================\n"
+
+print "Color Percentage: ", imageProcess.getImageColor()
+
+print "\n==================================================================================================\n"
+
+print "Duplicate Image Path: ", imageProcess.checkDuplicateImage("images/test-images")
