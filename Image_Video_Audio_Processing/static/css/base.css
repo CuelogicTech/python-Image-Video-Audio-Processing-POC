@@ -22,7 +22,6 @@ html, body { height: 100%; padding: 0; margin: 0; }
     text-overflow: ellipsis; 
 }
 #leftCol {
-    border: none;
     padding-top: 6%;
     width: 20%;
     height: 100%;
@@ -31,6 +30,9 @@ html, body { height: 100%; padding: 0; margin: 0; }
     margin-right: auto;
     background-color: white;
     margin-left: auto;
+    position: absolute;
+    z-index: 1;
+    height: 668px;
 }
 .btn-primary {
     color: #fff;
@@ -42,6 +44,8 @@ html, body { height: 100%; padding: 0; margin: 0; }
 	background-color: white;
     border-style: none;
     height: 100%;
+    margin-left: 20%;
+
 }
 .container{
 	width: 100%;

@@ -27,53 +27,82 @@
     $(document).ready(function() {
     });
 
-    $('#img_up').click(function() {
-        //SAVE AS Operation
-        data = {
+    var csrftoken = getCookie('csrftoken');
+    var url = '/core/image/basic/';
+    $('#fileupload').fileupload({
+        url: url,
+        crossDomain: false,
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        dataType: 'json',
+        done: function (e, data) {
+            $('#image_files').empty();
+            $("#imgupload").empty();
+            console.log(data.result.files);
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo('#image_files');
+                $("#imgupload").append("<img src="+file.url+" width='680' height='380'>");
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
         }
-        $.ajax({
-            url: 'get/image/results',
-            data: JSON.stringify(data),
-            type: 'POST',
-            success: function(response) {
-                console.log(response)
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-    });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-    $('#video_up').click(function() {
-        //SAVE AS Operation
-        data = {
+    var csrftoken = getCookie('csrftoken');
+    var audio_url = 'core/audio/basic/';
+    $('#a_upload').fileupload({
+        url: audio_url,
+        crossDomain: false,
+        acceptFileTypes: /(\.|\/)(mp3)$/i,
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo('#audio_files');
+                $('#audioup').append("<audio controls><source src="+file.url+" type='audio/mpeg'/></audio>");
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#audio_progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
         }
-        $.ajax({
-            url: 'get/video/results',
-            data: JSON.stringify(data),
-            type: 'POST',
-            success: function(response) {
-                console.log(response)
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-    });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-    $('#audio_up').click(function() {
-        //SAVE AS Operation
-        data = {
+    var csrftoken = getCookie('csrftoken');
+    var video_url = 'core/video/basic/';
+    $('#v_upload').fileupload({
+        url: video_url,
+        crossDomain: false,
+        acceptFileTypes: /(\.|\/)(mp4)$/i,
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo('#video_files');
+                $('#videoup').append("<video width='680' height='380' controls><source src="+file.url+" type='video/mp4'/></video>");
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#video_progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
         }
-        $.ajax({
-            url: 'get/audio/results',
-            data: JSON.stringify(data),
-            type: 'POST',
-            success: function(response) {
-                console.log(response)
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-    });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');

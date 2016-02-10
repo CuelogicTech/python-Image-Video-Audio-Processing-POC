@@ -49,8 +49,12 @@
           <h2>Upload Image</h2>
           <div class="well">
             <p>Upload an Image to proceed with Image Processing</p>
-              <input id="i_upload" type="file" accept="image*/">
-              <button type="submit" class="btn btn-primary" id="img_up">Upload</button>
+              <input id="fileupload" type="file" accept="image/*">
+              <br>
+              <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+              </div>
+              <div id="image_files" class="files"></div>
           </div>
           <br>
           <div class="container">
@@ -63,19 +67,19 @@
             </ul>
             <div class="tab-content">
               <div id="imgupload" class="tab-pane fade in active">
-                <h3>Uploaded Image</h3>
+                <h4>Uploaded Image</h4>
               </div>
               <div id="imgColors" class="tab-pane fade">
-                <h3>Colors</h3>
+                <h4>Colors</h4>
               </div>
               <div id="imgtext" class="tab-pane fade">
-                <h3>Text Recognized</h3>
+                <h4>Text Recognized</h4>
               </div>
               <div id="imgfaces" class="tab-pane fade">
-                <h3>Faces Recogized</h3>
+                <h4>Faces Recogized</h4>
               </div>
               <div id="dupimages" class="tab-pane fade">
-                <h3>Duplicate Images</h3>
+                <h4>Duplicate Images</h4>
               </div>
             </div>
           </div>
@@ -84,15 +88,23 @@
           <h2>Upload Audio</h2>
           <div class="well">
             <p>Upload an Audio to proceed with Audio Processing</p>
-            <input id="a_upload" type="file">
-            <button type="button" class="btn btn-primary" id="audio_up">Upload</button>
+            <input id="a_upload" type="file" accept="audio/*">
+            <br>
+             <div id="audio_progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+             </div>
+             <div id="audio_files"></div>
           </div>
           <br>
           <div class="container">
             <ul class="nav nav-tabs">
-              <li class="active"><a data-toggle="tab" href="#audtext">Text Recognized</a></li>
+              <li class="active"><a data-toggle="tab" href="#audioup">Audio</a></li>
+              <li><a data-toggle="tab" href="#audtext">Text Recognized</a></li>
             </ul>
             <div class="tab-content">
+              <div id="audioup" class="tab-pane fade in active">
+                <h5>Audio Uploaded</h5>
+              </div>
               <div id="audtext" class="tab-pane fade">
                 <h5>Text Recognized</h5>
               </div>
@@ -103,8 +115,12 @@
           <h2>Upload Video</h2>
           <div class="well">
             <p>Upload an video to proceed with Video Processing</p>
-            <input id="v_upload" type="file">
-            <button type="submit" class="btn btn-primary" id="video_up">Upload</button>
+            <input id="v_upload" type="file" accept="video/*">
+            <br>
+            <div id="video_progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div id="video_files"></div>
           </div>
           <br>
           <div class="container">
@@ -137,8 +153,10 @@
     ===================================a=============== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.ui.widget.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fileupload.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
   </body>
 </html>
