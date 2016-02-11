@@ -1,20 +1,22 @@
-# brew install imagemagick
-# brew install tesseract
+# sudo pip install tesseract
+# sudo apt-get install imagemagick
 
-# suo pip install Pillow
+# sudo pip install Pillow
 # sudo pip install pytesseract
 # intsall OpenCv (http://www.samontab.com/web/2014/06/installing-opencv-2-4-9-in-ubuntu-14-04-lts/)
-# sudo pip install pyssim (if used)
-# sudo pip install -U scikit-image (need to install sudo apt-get install python-scipy)
 
-#import numpy as np
+# sudo pip install -U scikit-image (need to install sudo apt-get install python-scipy)
+# sudo pip install -U nltk (http://www.nltk.org/install.html)
+# sudo pip install -U numpy
+# sudo pip install pyssim
+
 import cv2
 import sys
 import os
 from PIL import Image
 from pytesseract import *
-#from matplotlib import pyplot as plt
 from subprocess import check_output
+from textblob import TextBlob
 
 class ImageProcessing(object):
 
@@ -42,8 +44,10 @@ class ImageProcessing(object):
 
 		#cv2.imshow('img',img)
 		imageFilename = os.path.basename(self.imagePath)
-		
-		cv2.imwrite('images/face_detect/'+imageFilename, img)
+		if len(faces) > 0:
+			#pass
+			cv2.imwrite('images/face_detect/'+imageFilename, img)
+
 		#cv2.waitKey(0)
 		#cv2.destroyAllWindows()
 		face_detect = {}
@@ -54,7 +58,16 @@ class ImageProcessing(object):
 	def extract_text(self):
 
 		text = image_to_string(self.imgOpen)
-		return text
+
+		language = ""
+		if len(text) > 3 != "":
+			languageCode = self.detectLanguage(text)
+			language = self.languageName(languageCode)
+		
+		textinfo = {}
+		textinfo["text"] = text
+		#textinfo["language"] = language
+		return textinfo
 
 	def getImageColor(self):
 
@@ -78,7 +91,7 @@ class ImageProcessing(object):
 				duplicateImg = splitImagePath[0].split(':')
 				
 				duplicateImgRatio = float(duplicateImg[1]) * 100
-				if duplicateImgRatio > 45:
+				if duplicateImgRatio >= 50:
 					duplicateImages.append(duplicateImg[0])
 
 		return duplicateImages
@@ -140,6 +153,17 @@ class ImageProcessing(object):
 			return True
 		else:
 			return False
+
+	def detectLanguage(self, text):
+   
+		language = TextBlob(text.decode('utf-8').strip())
+		return language.detect_language()
+
+	def languageName(slef, languageCode):
+
+		languageDict = {'af' : 'Afrikaans', 'sq' : 'Albanian', 'ar' : 'Arabic', 'hy' : 'Armenian', 'az' : 'Azerbaijani', 'eu' : 'Basque', 'be' : 'Belarusian', 'bn' : 'Bengali', 'bs' : 'Bosnian', 'bg' : 'Bulgarian', 'ca' : 'Catalan', 'ceb' : 'Cebuano', 'ny' : 'Chichewa', 'zh-CN' : 'Chinese', 'zh-TW' : 'Chinese', 'hr' : 'Croatian', 'cs' : 'Czech', 'da' : 'Danish', 'nl' : 'Dutch', 'en' : 'English', 'eo' : 'Esperanto', 'et' : 'Estonian', 'fil' : 'Filipino', 'tl' : 'Finnish', 'fr' : 'French', 'Galician' : 'gl', 'Georgian' : 'ka', 'German' : 'de', 'Greek' : 'el', 'Gujarati' : 'gu', 'Haitian' : 'ht', 'Hausa'	: 'ha', 'Hebrew' : 'iw', 'Hindi' : 'hi', 'Hmong' : 'hmn', 'Hungarian' : 'hu', 'Icelandic' : 'is', 'Igbo' : 'ig', 'Indonesian' : 'id', 'Irish' : 'ga', 'Italian' : 'it', 'Japanese' : 'ja', 'Javanese' : 'jw', 'Kannada' : 'kn', 'Kazakh' : 'kk', 'Khmer' : 'km', 'Korean' : 'ko', 'Lao' : 'lo', 'Latin' : 'la', 'Latvian' : 'lv', 'Lithuanian' : 'lt', 'Macedonian' : 'mk', 'Malagasy' : 'mg', 'Malay' : 'ms', 'Malayalam' : 'ml', 'Maltese' : 'mt', 'Maori' : 'mi', 'Marathi' : 'mr', 'Mongolian' : 'mn', 'Myanmar' : 'my', 'Nepali' : 'ne', 'Norwegian' : 'no', 'Persian' : 'fa', 'Polish' : 'pl', 'Portuguese' : 'pt', 'Punjabi' : 'pa', 'Romanian' : 'ro', 'Russian' : 'ru', 'Serbian' : 'sr', 'Sesotho' :	'st', 'Sinhala' : 'si', 'Slovak' : 'sk', 'Slovenian' : 'sl', 'Somali' : 'so', 'Spanish' : 'es', 'Sudanese' : 'su', 'Swahili' : 'sw', 'Swedish' : 'sv', 'Tajik' : 'tg', 'Tamil' : 'ta', 'Telugu' : 'te', 'Thai' : 'th', 'Turkish' : 'tr', 'Ukrainian' : 'uk', 'Urdu' : 'ur', 'Uzbek' : 'uz', 'Vietnamese' : 'vi', 'Welsh' : 'cy', 'Yiddish' : 'yi', 'Yoruba' : 'yo', 'Zulu' : 'zu'}
+
+		return languageDict[languageCode]
 
 
 imagePath = sys.argv[1]
