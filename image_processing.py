@@ -17,6 +17,7 @@ from PIL import Image
 from pytesseract import *
 from subprocess import check_output
 from textblob import TextBlob
+from django.conf import settings
 
 class ImageProcessing(object):
 
@@ -32,6 +33,7 @@ class ImageProcessing(object):
 
 		face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
 		eye_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_eye.xml')
+		face_detect = {}
 
 		img = cv2.imread(self.imagePath)
 		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -44,18 +46,16 @@ class ImageProcessing(object):
 
 		#cv2.imshow('img',img)
 		imageFilename = os.path.basename(self.imagePath)
-		if len(faces) > 0:
+		if not os.path.exists(settings.MEDIA_ROOT+'face_detect/'):
+			os.makedirs(settings.MEDIA_ROOT+'face_detect/', 777)
 
-			if not os.path.exists('images/face_detect/'):
-				os.makedirs('images/face_detect/')
-			
-			cv2.imwrite('images/face_detect/'+imageFilename, img)
-			
+		if len(faces) > 0:
+			cv2.imwrite(settings.MEDIA_ROOT+'face_detect/'+imageFilename, img)
+			face_detect["result_image"] = settings.MEDIA_URL+'face_detect/'+imageFilename			
+		
+		face_detect["face_count"] = len(faces)
 		#cv2.waitKey(0)
 		#cv2.destroyAllWindows()
-		face_detect = {}
-		face_detect["face_count"] = len(faces)
-		face_detect["result_image"] = 'images/face_detect/'+imageFilename
 
 		return face_detect
 
@@ -171,7 +171,7 @@ class ImageProcessing(object):
 
 	def languageName(slef, languageCode):
 
-		languageDict = {'af' : 'Afrikaans', 'sq' : 'Albanian', 'ar' : 'Arabic', 'hy' : 'Armenian', 'az' : 'Azerbaijani', 'eu' : 'Basque', 'be' : 'Belarusian', 'bn' : 'Bengali', 'bs' : 'Bosnian', 'bg' : 'Bulgarian', 'ca' : 'Catalan', 'ceb' : 'Cebuano', 'ny' : 'Chichewa', 'zh-CN' : 'Chinese', 'zh-TW' : 'Chinese', 'hr' : 'Croatian', 'cs' : 'Czech', 'da' : 'Danish', 'nl' : 'Dutch', 'en' : 'English', 'eo' : 'Esperanto', 'et' : 'Estonian', 'fil' : 'Filipino', 'tl' : 'Finnish', 'fr' : 'French', 'Galician' : 'gl', 'Georgian' : 'ka', 'German' : 'de', 'Greek' : 'el', 'Gujarati' : 'gu', 'Haitian' : 'ht', 'Hausa'	: 'ha', 'Hebrew' : 'iw', 'Hindi' : 'hi', 'Hmong' : 'hmn', 'Hungarian' : 'hu', 'Icelandic' : 'is', 'Igbo' : 'ig', 'Indonesian' : 'id', 'Irish' : 'ga', 'Italian' : 'it', 'Japanese' : 'ja', 'Javanese' : 'jw', 'Kannada' : 'kn', 'Kazakh' : 'kk', 'Khmer' : 'km', 'Korean' : 'ko', 'Lao' : 'lo', 'Latin' : 'la', 'Latvian' : 'lv', 'Lithuanian' : 'lt', 'Macedonian' : 'mk', 'Malagasy' : 'mg', 'Malay' : 'ms', 'Malayalam' : 'ml', 'Maltese' : 'mt', 'Maori' : 'mi', 'Marathi' : 'mr', 'Mongolian' : 'mn', 'Myanmar' : 'my', 'Nepali' : 'ne', 'Norwegian' : 'no', 'Persian' : 'fa', 'Polish' : 'pl', 'Portuguese' : 'pt', 'Punjabi' : 'pa', 'Romanian' : 'ro', 'Russian' : 'ru', 'Serbian' : 'sr', 'Sesotho' :	'st', 'Sinhala' : 'si', 'Slovak' : 'sk', 'Slovenian' : 'sl', 'Somali' : 'so', 'Spanish' : 'es', 'Sudanese' : 'su', 'Swahili' : 'sw', 'Swedish' : 'sv', 'Tajik' : 'tg', 'Tamil' : 'ta', 'Telugu' : 'te', 'Thai' : 'th', 'Turkish' : 'tr', 'Ukrainian' : 'uk', 'Urdu' : 'ur', 'Uzbek' : 'uz', 'Vietnamese' : 'vi', 'Welsh' : 'cy', 'Yiddish' : 'yi', 'Yoruba' : 'yo', 'Zulu' : 'zu'}
+		languageDict = {'af' : 'Afrikaans', 'sq' : 'Albanian', 'ar' : 'Arabic', 'hy' : 'Armenian', 'az' : 'Azerbaijani', 'eu' : 'Basque', 'be' : 'Belarusian', 'bn' : 'Bengali', 'bs' : 'Bosnian', 'bg' : 'Bulgarian', 'ca' : 'Catalan', 'ceb' : 'Cebuano', 'ny' : 'Chichewa', 'zh-CN' : 'Chinese', 'zh-TW' : 'Chinese', 'hr' : 'Croatian', 'cs' : 'Czech', 'da' : 'Danish', 'nl' : 'Dutch', 'en' : 'English', 'eo' : 'Esperanto', 'et' : 'Estonian', 'fil' : 'Filipino', 'tl' : 'Finnish', 'fr' : 'French', 'Galician' : 'gl', 'Georgian' : 'ka', 'de' : 'German', 'el' : 'Greek', 'Gujarati' : 'gu', 'Haitian' : 'ht', 'Hausa'	: 'ha', 'Hebrew' : 'iw', 'Hindi' : 'hi', 'Hmong' : 'hmn', 'Hungarian' : 'hu', 'Icelandic' : 'is', 'Igbo' : 'ig', 'Indonesian' : 'id', 'Irish' : 'ga', 'Italian' : 'it', 'Japanese' : 'ja', 'Javanese' : 'jw', 'Kannada' : 'kn', 'Kazakh' : 'kk', 'Khmer' : 'km', 'Korean' : 'ko', 'Lao' : 'lo', 'Latin' : 'la', 'Latvian' : 'lv', 'Lithuanian' : 'lt', 'Macedonian' : 'mk', 'Malagasy' : 'mg', 'Malay' : 'ms', 'Malayalam' : 'ml', 'Maltese' : 'mt', 'Maori' : 'mi', 'Marathi' : 'mr', 'Mongolian' : 'mn', 'Myanmar' : 'my', 'Nepali' : 'ne', 'Norwegian' : 'no', 'Persian' : 'fa', 'Polish' : 'pl', 'Portuguese' : 'pt', 'Punjabi' : 'pa', 'Romanian' : 'ro', 'Russian' : 'ru', 'Serbian' : 'sr', 'Sesotho' :	'st', 'Sinhala' : 'si', 'Slovak' : 'sk', 'Slovenian' : 'sl', 'Somali' : 'so', 'Spanish' : 'es', 'Sudanese' : 'su', 'Swahili' : 'sw', 'Swedish' : 'sv', 'Tajik' : 'tg', 'Tamil' : 'ta', 'Telugu' : 'te', 'Thai' : 'th', 'Turkish' : 'tr', 'Ukrainian' : 'uk', 'Urdu' : 'ur', 'Uzbek' : 'uz', 'Vietnamese' : 'vi', 'Welsh' : 'cy', 'Yiddish' : 'yi', 'Yoruba' : 'yo', 'Zulu' : 'zu', 'sv' : 'Swedish'}
 
 		return languageDict[languageCode]
 
