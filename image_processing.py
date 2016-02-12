@@ -85,14 +85,20 @@ class ImageProcessing(object):
 
 		duplicateImages = []
 		split_result = images_compare.split(' - ')
-		for image_path in split_result:
-			splitImagePath = image_path.split('\n')
-			if len(splitImagePath) == 2 :
-				duplicateImg = splitImagePath[0].split(':')
+
+		if len(split_result) > 0:
+			
+			for image_path in split_result:
+				splitImagePath = image_path.split('\n')
+
+				if len(splitImagePath) == 2 :
+					duplicateImg = splitImagePath[0].split(':')
+
+					if len(duplicateImg) > 0:
 				
-				duplicateImgRatio = float(duplicateImg[1]) * 100
-				if duplicateImgRatio >= 50:
-					duplicateImages.append(duplicateImg[0])
+						duplicateImgRatio = float(duplicateImg[1]) * 100
+						if duplicateImgRatio >= 50:
+							duplicateImages.append(duplicateImg[0])
 
 		return duplicateImages
 
