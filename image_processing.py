@@ -48,8 +48,9 @@ class ImageProcessing(object):
 
 			if not os.path.exists('images/face_detect/'):
 				os.makedirs('images/face_detect/')
-				cv2.imwrite('images/face_detect/'+imageFilename, img)
-
+			
+			cv2.imwrite('images/face_detect/'+imageFilename, img)
+			
 		#cv2.waitKey(0)
 		#cv2.destroyAllWindows()
 		face_detect = {}
@@ -69,7 +70,7 @@ class ImageProcessing(object):
 		
 		textinfo = {}
 		textinfo["text"] = text
-		#textinfo["language"] = language
+		textinfo["language"] = language
 		return textinfo
 
 	def getImageColor(self):
