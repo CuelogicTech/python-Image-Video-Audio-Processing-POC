@@ -45,14 +45,17 @@ class ImageProcessing(object):
 		#cv2.imshow('img',img)
 		imageFilename = os.path.basename(self.imagePath)
 		if len(faces) > 0:
-			#pass
-			cv2.imwrite('images/face_detect/'+imageFilename, img)
+
+			if not os.path.exists('images/face_detect/'):
+				os.makedirs('images/face_detect/')
+				cv2.imwrite('images/face_detect/'+imageFilename, img)
 
 		#cv2.waitKey(0)
 		#cv2.destroyAllWindows()
 		face_detect = {}
 		face_detect["face_count"] = len(faces)
 		face_detect["result_image"] = 'images/face_detect/'+imageFilename
+
 		return face_detect
 
 	def extract_text(self):
@@ -87,7 +90,7 @@ class ImageProcessing(object):
 		split_result = images_compare.split(' - ')
 
 		if len(split_result) > 0:
-			
+
 			for image_path in split_result:
 				splitImagePath = image_path.split('\n')
 
