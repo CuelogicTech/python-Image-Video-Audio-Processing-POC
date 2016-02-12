@@ -34,18 +34,31 @@ class processAudioVideo(object):
 
         if int(major_ver) < 3:
             fps = video.get(cv2.cv.CV_CAP_PROP_FPS)
+            if str(fps) == 'nan':
+                print '\n', '~~' * 40
+                print 'The video file is seems to be corrupted, please upload another file.'
+                print '~~' * 40, '\n'
+                sys.exit()
             total_frame_count = video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
         else:
             fps = video.get(cv2.CAP_PROP_FPS)
+            if str(fps) == 'nan':
+                print '\n', '~~' * 40
+                print 'The video file is seems to be corrupted, please upload another file.'
+                print '~~' * 40, '\n'
+                sys.exit()
             total_frame_count = video.get(cv2.cv.CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
         print "=>Frames per second using: {0}".format(fps)
         print "=>Length of video: {0} minutes".format(length)
         response = self.processMedia(seconds, self.fileType)
-        print "=>Transcription: ", str(response)
+        if not response.strip():
+            print "=>Exception: Cannot detect the words"
+        else:
+            print "=>Transcription: ", str(response)
         video.release()
 
     def calculateVideoLengthAndFps(self, video, total_frame_count, fps):
@@ -80,7 +93,10 @@ class processAudioVideo(object):
 
         print "=>Length of audio: {0} minutes".format(actual_length)
         response = self.processMedia(seconds, self.fileType)
-        print "=>Transcription: ", str(response)
+        if not response.strip():
+            print "=>Exception: Cannot detect the words"
+        else:
+            print "=>Transcription: ", str(response)
 
     def processMedia(self, actual_length, mediaType):
         start = 0
