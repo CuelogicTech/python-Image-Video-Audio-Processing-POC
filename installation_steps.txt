@@ -63,8 +63,9 @@
 		cd /python
 		source avprocessing/bin/activate
 
-10. ffmpeg installation 
-	sudo apt-get install ffmpeg (wait untill it completes, it also take some time for installation)
+10. ffmpeg installation (wait untill it completes, it also take some time for installation)
+	sudo apt-add-repository ppa:mc3man/trusty-media
+	sudo apt-get install ffmpeg
 
 11. moviepy installation (This library used to divide the video file in chunks, we need to send start & end position)
 	sudo pip install moviepy
