@@ -6,6 +6,7 @@ import speech_recognition as sr
 import time
 import urlparse
 import os.path
+import re
 
 
 class processAudioVideo(object):
@@ -104,13 +105,19 @@ class processAudioVideo(object):
         text = ''
         length = int(actual_length)
         func = self.processVideoChunks if mediaType == 'video' else self.processAudioChunks
-
+        
         # if the length of the video is less than 10 secs.
         if(length > 10):
             quotient = divmod(length, 10)
             quo1 = quotient[0]
             quo2 = quotient[1]
             length = quo1 + 1
+        else:
+            int1 = re.split('[ .]', str(actual_length))
+
+            quo1 = 0
+            quo2 = int(int1[0])
+            length = 1
 
         for i in range(0, length):
 
