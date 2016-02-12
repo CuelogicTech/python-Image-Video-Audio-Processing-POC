@@ -11,6 +11,15 @@ import os.path
 class processAudioVideo(object):
 
     def __init__(self, filePath):
+        self.frameDirectory = 'avprocessing/frames/'
+        self.audioDirectory = 'avprocessing/audio/'
+
+        if not os.path.exists(self.frameDirectory):
+            os.makedirs(self.frameDirectory, 0777)
+
+        if not os.path.exists(self.audioDirectory):
+            os.makedirs(self.audioDirectory, 0777)
+
         self.filePath = filePath
         file_split_path = os.path.splitext(os.path.basename(urlparse.urlsplit(self.filePath).path))
         self.fileName = file_split_path[0]
@@ -53,7 +62,7 @@ class processAudioVideo(object):
         while is_exist:
             is_exist, frame = video.read()
             if count % 30 == 0:
-                cv2.imwrite('frames/frame_' + self.fileName + '_' + str(count) + '.jpg', frame)
+                cv2.imwrite(self.frameDirectory + 'frame_' + self.fileName + '_' + str(count) + '.jpg', frame)
             count = count + 1
             cv2.waitKey(1)
 
@@ -63,8 +72,8 @@ class processAudioVideo(object):
 
         self.fileType = mediaType
         sound = AudioSegment.from_file(self.filePath)
-        sound.export('audio/' + self.fileName + '.wav', format="wav")
-        self.filePath = 'audio/' + self.fileName + '.wav'
+        sound.export(self.audioDirectory + self.fileName + '.wav', format="wav")
+        self.filePath = self.audioDirectory + self.fileName + '.wav'
 
         seconds = (len(sound) / 1000)
         actual_length = time.strftime("%H:%M:%S", time.gmtime(seconds))
@@ -102,14 +111,14 @@ class processAudioVideo(object):
 
     def processAudioChunks(self, start, end, i):
         clip = mp.AudioFileClip(self.filePath).subclip(start, end)
-        clip.write_audiofile("audio/" + self.fileName + '_' + str(i) + ".wav")
-        text = str(self.convertAudioToText("audio/" + self.fileName + '_' + str(i) + ".wav"))
+        clip.write_audiofile(self.audioDirectory + self.fileName + '_' + str(i) + ".wav")
+        text = str(self.convertAudioToText(self.audioDirectory + self.fileName + '_' + str(i) + ".wav"))
         return text
 
     def processVideoChunks(self, start, end, i):
         clip = mp.VideoFileClip(self.filePath).subclip(start, end)
-        clip.audio.write_audiofile("audio/" + self.fileName + '_' + str(i) + ".wav")
-        text = str(self.convertAudioToText("audio/" + self.fileName + '_' + str(i) + ".wav"))
+        clip.audio.write_audiofile(self.audioDirectory + self.fileName + '_' + str(i) + ".wav")
+        text = str(self.convertAudioToText(self.audioDirectory + self.fileName + '_' + str(i) + ".wav"))
         return text
 
     def convertAudioToText(self, audioPath):

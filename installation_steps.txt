@@ -84,3 +84,9 @@
 
 15. pytesseract installation (This library helps pillow for extracting text from image)
 	sudo pip install pytesseract
+
+16. pydub installation (This file help us to convert the audio file to .wav format)
+		- before installing the pydub we need to install avlib, so execute the following command
+		- sudo apt-get install libav-tools
+		- pip install pydub
+
