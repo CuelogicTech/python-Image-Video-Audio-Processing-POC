@@ -1,3 +1,4 @@
+
 import cv2
 import sys
 import os
@@ -6,7 +7,6 @@ from pytesseract import *
 from subprocess import check_output
 from textblob import TextBlob
 from django.conf import settings
-
 
 class ImageProcessing(object):
 
@@ -87,7 +87,7 @@ class ImageProcessing(object):
                 if len(splitImagePath) == 2:
                     duplicateImg = splitImagePath[0].split(':')
 
-                    if len(duplicateImg) > 0:
+                    if len(duplicateImg) > 0 and len(duplicateImg) == 2:
 
                         duplicateImgRatio = float(duplicateImg[1]) * 100
                         if duplicateImgRatio >= 50:
