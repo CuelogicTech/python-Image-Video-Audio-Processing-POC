@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-
 class Picture(models.Model):
     file = models.ImageField(upload_to="pictures")
     slug = models.SlugField(max_length=50, blank=True)

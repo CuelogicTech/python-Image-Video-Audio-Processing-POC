@@ -3,6 +3,7 @@ import mimetypes
 import re
 from django.core.urlresolvers import reverse
 from django.conf import settings
+import uuid
 
 
 def order_name(name):
@@ -12,10 +13,7 @@ def order_name(name):
     name -- text to be limited.
 
     """
-    name = re.sub(r'^.*/', '', name)
-    if len(name) <= 20:
-        return name
-    return name[:10] + "..." + name[-7:]
+    return  name
 
 
 def serialize(instance, file_attr='file'):

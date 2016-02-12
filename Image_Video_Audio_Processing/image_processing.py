@@ -16,7 +16,7 @@ class ImageProcessing(object):
 		self.imagePath = image
 
 		if self.imageValidation():
-			self.imgOpen = Image.open(self.imagePath)
+			self.imgOpen = Image.open(str(self.imagePath))
 
 	def faceDetection(self):
 
@@ -36,8 +36,9 @@ class ImageProcessing(object):
 		#cv2.imshow('img',img)
 		imageFilename = os.path.basename(self.imagePath)
 		if not os.path.exists(settings.MEDIA_ROOT+'face_detect/'):
-			os.makedirs(settings.MEDIA_ROOT+'face_detect/', 777)
+			os.makedirs(settings.MEDIA_ROOT+'face_detect/')
 
+		print len(faces)
 		if len(faces) > 0:
 			cv2.imwrite(settings.MEDIA_ROOT+'face_detect/'+imageFilename, img)
 			face_detect["result_image"] = settings.MEDIA_URL+'face_detect/'+imageFilename			
@@ -78,19 +79,18 @@ class ImageProcessing(object):
 
 		duplicateImages = []
 		split_result = images_compare.split(' - ')
-
 		if len(split_result) > 0:
 
 			for image_path in split_result:
 				splitImagePath = image_path.split('\n')
 
+
 				if len(splitImagePath) == 2 :
 					duplicateImg = splitImagePath[0].split(':')
-
-					if len(duplicateImg) > 0:
-				
+					
+					if len(duplicateImg) > 0 and len(duplicateImg) == 2:
 						duplicateImgRatio = float(duplicateImg[1]) * 100
-						if duplicateImgRatio >= 50:
+						if duplicateImgRatio >= 60:
 							duplicateImages.append(duplicateImg[0])
 
 		return duplicateImages
