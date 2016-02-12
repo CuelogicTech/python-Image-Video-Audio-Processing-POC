@@ -60,7 +60,7 @@ class processAudioVideo(object):
 
         # print "=>Frames per second using: {0}".format(fps)
         # print "=>Length of video: {0} minutes".format(length)
-        # response = self.processMedia(seconds, self.fileType)
+        response = self.processMedia(seconds, self.fileType)
         # if not response.strip():
         #     print "=>Exception: Cannot detect the words"
         # else:
@@ -68,7 +68,7 @@ class processAudioVideo(object):
 
         response_dict = {
             'fps' : fps,
-            'medialength': length
+            'medialength': length,
             'message' : str(response)
         }
         return response_dict
@@ -107,7 +107,7 @@ class processAudioVideo(object):
         actual_length = time.strftime("%H:%M:%S", time.gmtime(seconds))
 
         # print "=>Length of audio: {0} minutes".format(actual_length)
-        # response = self.processMedia(seconds, self.fileType)
+        response = self.processMedia(seconds, self.fileType)
         # if not response.strip():
         #     print "=>Exception: Cannot detect the words"
         # else:
@@ -115,7 +115,7 @@ class processAudioVideo(object):
 
         response_dict = {
             'fps' : 0,
-            'medialength': actual_length
+            'medialength': actual_length,
             'message' : str(response)
         }
         return response_dict
@@ -155,7 +155,7 @@ class processAudioVideo(object):
 
         return text
 
-   def processAudioChunks(self, start, end, i):
+    def processAudioChunks(self, start, end, i):
         clip = mp.AudioFileClip(self.filePath).subclip(start, end)
         clip.write_audiofile(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav")
         text = str(self.convertAudioToText(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav"))
