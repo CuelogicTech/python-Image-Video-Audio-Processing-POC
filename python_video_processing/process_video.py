@@ -7,6 +7,9 @@ import time
 import urlparse
 import os.path
 import re
+import subprocess
+import shlex
+import json
 
 
 class processAudioVideo(object):
@@ -37,10 +40,10 @@ class processAudioVideo(object):
             fps = video.get(cv2.cv.CV_CAP_PROP_FPS)
 
             if str(fps) == 'nan':
-                print '\n', '~~' * 40
-                print 'The video file is seems to be corrupted, please upload another file.'
-                print '~~' * 40, '\n'
-                sys.exit()
+                # print 'The video file is seems to be corrupted, please upload another file.'
+                return response_dict = {
+                    'error' : 'The video file is seems to be corrupted, please upload another file.'
+                }
 
             total_frame_count = video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
@@ -49,18 +52,20 @@ class processAudioVideo(object):
             fps = video.get(cv2.CAP_PROP_FPS)
             
             if str(fps) == 'nan':
-                print '\n', '~~' * 40
-                print 'The video file is seems to be corrupted, please upload another file.'
-                print '~~' * 40, '\n'
-                sys.exit()
+                # print 'The video file is seems to be corrupted, please upload another file.'
+                return response_dict = {
+                    'error' : 'The video file is seems to be corrupted, please upload another file.'
+                }
             
             total_frame_count = video.get(cv2.cv.CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
+        response = self.processMedia(seconds, self.fileType)
+        height, width = self.findVideoResolution()
 
         # print "=>Frames per second using: {0}".format(fps)
         # print "=>Length of video: {0} minutes".format(length)
-        response = self.processMedia(seconds, self.fileType)
+        # print "=>Video resolution: height-> {0}, width-> {1}".format(height, width)
         # if not response.strip():
         #     print "=>Exception: Cannot detect the words"
         # else:
@@ -69,7 +74,9 @@ class processAudioVideo(object):
         response_dict = {
             'fps' : fps,
             'medialength': length,
-            'message' : str(response)
+            'message' : str(response),
+            'height'  : height,
+            'width'   : width
         }
         return response_dict
 
@@ -105,9 +112,9 @@ class processAudioVideo(object):
 
         seconds = (len(sound) / 1000)
         actual_length = time.strftime("%H:%M:%S", time.gmtime(seconds))
+        response = self.processMedia(seconds, self.fileType)
 
         # print "=>Length of audio: {0} minutes".format(actual_length)
-        response = self.processMedia(seconds, self.fileType)
         # if not response.strip():
         #     print "=>Exception: Cannot detect the words"
         # else:
@@ -179,6 +186,22 @@ class processAudioVideo(object):
             # print("Could not understand audio") # speech is unintelligible
             return ''
 
+
+    # function to find the resolution of the input video file
+    def findVideoResolution(self):
+        cmd = "ffprobe -v quiet -print_format json -show_streams"
+        args = shlex.split(cmd)
+        args.append(self.filePath)
+        # run the ffprobe process, decode stdout into utf-8 & convert to JSON
+        ffprobeOutput = subprocess.check_output(args).decode('utf-8')
+        ffprobeOutput = json.loads(ffprobeOutput)
+
+        # find height and width
+        height = ffprobeOutput['streams'][0]['height']
+        width = ffprobeOutput['streams'][0]['width']
+
+        return height, width
+
     def validateExt(self):
 
         file_path, filename = os.path.split(self.filePath)
@@ -186,8 +209,9 @@ class processAudioVideo(object):
         is_path_exists = os.path.isfile(self.filePath)
         
         if not is_path_exists:
-            print "File doesn't exists."
-            sys.exit()
+            return response_dict = {
+                'error' : 'File doesn\'t exists.'
+            }
 
         video_extension_list = ['.mp4']
         audio_extension_list = ['.wav', '.mp3', '.ogg', '.mpeg', '.wma', '.m4a']
@@ -197,7 +221,7 @@ class processAudioVideo(object):
         elif extension.lower() in audio_extension_list:
             return 'audio'
         else:
-            return False
+            return "Invalid File Format"
 
 filePath = sys.argv[1]
 fileObject = processAudioVideo(filePath)
