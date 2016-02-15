@@ -63,8 +63,9 @@
 		cd /python
 		source avprocessing/bin/activate
 
-10. ffmpeg installation 
-	sudo apt-get install ffmpeg (wait untill it completes, it also take some time for installation)
+10. ffmpeg installation (wait untill it completes, it also take some time for installation)
+	sudo apt-add-repository ppa:mc3man/trusty-media
+	sudo apt-get install ffmpeg
 
 11. moviepy installation (This library used to divide the video file in chunks, we need to send start & end position)
 	sudo pip install moviepy
@@ -84,9 +85,23 @@
 
 15. pytesseract installation (This library helps pillow for extracting text from image)
 	sudo pip install pytesseract
+	sudo pip install tesseract
 
 16. pydub installation (This file help us to convert the audio file to .wav format)
 		- before installing the pydub we need to install avlib, so execute the following command
 		- sudo apt-get install libav-tools
 		- pip install pydub
 
+17. imagemagick installation (This file is used to help the find out the image ratio, dimensions,
+		height, width, pixels etc)
+	sudo apt-get install imagemagick
+
+18. scikit-image (This library is a collection of algorithms for image processing)
+	sudo pip install -U scikit-image
+	
+19. python-scipy (This is a ecosystem of open-source software for mathematics, science, and engineering)
+	sudo apt-get install python-scipy
+
+20. pyssim (This module implements the Structural Similarity Image Metric (SSIM))
+ 	sudo pip install pyssim
+ 

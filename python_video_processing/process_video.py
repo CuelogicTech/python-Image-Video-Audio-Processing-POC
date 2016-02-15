@@ -6,7 +6,7 @@ import speech_recognition as sr
 import time
 import urlparse
 import os.path
-
+import re
 
 class processAudioVideo(object):
 
@@ -25,8 +25,9 @@ class processAudioVideo(object):
         self.fileName = file_split_path[0]
 
     def processVideo(self, mediaType):
-
+        
         video = cv2.VideoCapture(self.filePath)
+        videoClip = mp.VideoFileClip(self.filePath)
         self.fileType = mediaType
 
         # Find OpenCV version
@@ -34,32 +35,46 @@ class processAudioVideo(object):
 
         if int(major_ver) < 3:
             fps = video.get(cv2.cv.CV_CAP_PROP_FPS)
+
             if str(fps) == 'nan':
-                print '\n', '~~' * 40
-                print 'The video file is seems to be corrupted, please upload another file.'
-                print '~~' * 40, '\n'
-                sys.exit()
+                # print 'The video file is seems to be corrupted, please upload another file.'
+                response_dict = {
+                    'error' : 'The video file is seems to be corrupted, please upload another file.'
+                }
+                return response_dict
+
             total_frame_count = video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
         else:
             fps = video.get(cv2.CAP_PROP_FPS)
+            
             if str(fps) == 'nan':
-                print '\n', '~~' * 40
-                print 'The video file is seems to be corrupted, please upload another file.'
-                print '~~' * 40, '\n'
-                sys.exit()
+                # print 'The video file is seems to be corrupted, please upload another file.'
+                response_dict = {
+                    'error' : 'The video file is seems to be corrupted, please upload another file.'
+                }
+                return response_dict
+
             total_frame_count = video.get(cv2.cv.CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
-        print "=>Frames per second using: {0}".format(fps)
-        print "=>Length of video: {0} minutes".format(length)
         response = self.processMedia(seconds, self.fileType)
-        if not response.strip():
-            print "=>Exception: Cannot detect the words"
-        else:
-            print "=>Transcription: ", str(response)
+        width, height = videoClip.size
+        videoQuality = self.getVideoQuality(width)
+
+        response_dict = {
+            'fps'        : fps,
+            'medialength': length,
+            'message'    : str(response),
+            'height'     : height,
+            'width'      : width,
+            'quality'    : videoQuality
+        }
+        return response_dict
+
         video.release()
+        sys.exit()
 
     def calculateVideoLengthAndFps(self, video, total_frame_count, fps):
 
@@ -82,7 +97,6 @@ class processAudioVideo(object):
         return fps, minutes, seconds
 
     def processAudio(self, mediaType):
-
         self.fileType = mediaType
         sound = AudioSegment.from_file(self.filePath)
         sound.export(self.audioDirectory + self.fileName + '.wav', format="wav")
@@ -90,13 +104,16 @@ class processAudioVideo(object):
 
         seconds = (len(sound) / 1000)
         actual_length = time.strftime("%H:%M:%S", time.gmtime(seconds))
-
-        print "=>Length of audio: {0} minutes".format(actual_length)
         response = self.processMedia(seconds, self.fileType)
-        if not response.strip():
-            print "=>Exception: Cannot detect the words"
-        else:
-            print "=>Transcription: ", str(response)
+
+        response_dict = {
+            'fps' : 0,
+            'medialength': actual_length,
+            'message' : str(response)
+        }
+        return response_dict
+
+        sys.exit()
 
     def processMedia(self, actual_length, mediaType):
         start = 0
@@ -104,13 +121,19 @@ class processAudioVideo(object):
         text = ''
         length = int(actual_length)
         func = self.processVideoChunks if mediaType == 'video' else self.processAudioChunks
-
+        
         # if the length of the video is less than 10 secs.
         if(length > 10):
             quotient = divmod(length, 10)
             quo1 = quotient[0]
             quo2 = quotient[1]
             length = quo1 + 1
+        else:
+            int1 = re.split('[ .]', str(actual_length))
+
+            quo1 = 0
+            quo2 = int(int1[0])
+            length = 1
 
         for i in range(0, length):
 
@@ -127,14 +150,14 @@ class processAudioVideo(object):
 
     def processAudioChunks(self, start, end, i):
         clip = mp.AudioFileClip(self.filePath).subclip(start, end)
-        clip.write_audiofile(self.audioDirectory + self.fileName + '_' + str(i) + ".wav")
-        text = str(self.convertAudioToText(self.audioDirectory + self.fileName + '_' + str(i) + ".wav"))
+        clip.write_audiofile(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav")
+        text = str(self.convertAudioToText(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav"))
         return text
 
     def processVideoChunks(self, start, end, i):
         clip = mp.VideoFileClip(self.filePath).subclip(start, end)
-        clip.audio.write_audiofile(self.audioDirectory + self.fileName + '_' + str(i) + ".wav")
-        text = str(self.convertAudioToText(self.audioDirectory + self.fileName + '_' + str(i) + ".wav"))
+        clip.audio.write_audiofile(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav")
+        text = str(self.convertAudioToText(str(self.audioDirectory) + str(self.fileName) + '_' + str(i) + ".wav"))
         return text
 
     def convertAudioToText(self, audioPath):
@@ -146,13 +169,33 @@ class processAudioVideo(object):
             # recognize speech using Google Speech Recognition
             return r.recognize_google(audio) + ' '
         except:
-            # print("Could not understand audio") # speech is unintelligible
+            # speech is unintelligible
             return ''
 
-    def validateExt(self):
+    def getVideoQuality(self, width):
+        width = int(width)
+        if width < 470:
+            return 'Standard Definition Quality'
+        elif width > 470 and width < 710:
+            return 'Enhanced Definition Quality'
+        elif width > 710 and width < 2000:
+            return 'High Definition Quality'
+        elif width > 2000 and width < 8650:
+            return 'Ultra High Definition Quality'
+        else:
+            return 'Low Quality'
 
+
+    def validateExt(self):
         file_path, filename = os.path.split(self.filePath)
         shortname, extension = os.path.splitext(filename)
+        is_path_exists = os.path.isfile(self.filePath)
+        
+        if not is_path_exists:
+            response_dict = {
+                'error' : 'File doesn\'t exists.'
+            }
+            return response_dict
 
         video_extension_list = ['.mp4']
         audio_extension_list = ['.wav', '.mp3', '.ogg', '.mpeg', '.wma', '.m4a']
@@ -162,7 +205,7 @@ class processAudioVideo(object):
         elif extension.lower() in audio_extension_list:
             return 'audio'
         else:
-            return False
+            return "Invalid File Format"
 
 filePath = sys.argv[1]
 fileObject = processAudioVideo(filePath)
