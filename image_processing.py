@@ -6,7 +6,7 @@ from PIL import Image
 from pytesseract import *
 from subprocess import check_output
 from textblob import TextBlob
-from django.conf import settings
+#from django.conf import settings
 
 class ImageProcessing(object):
 
@@ -28,23 +28,23 @@ class ImageProcessing(object):
         img = cv2.imread(self.imagePath)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        faces = face_cascade.detectMultiScale(gray, 1.3, 4, minSize=(20, 20), flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
+        faces = face_cascade.detectMultiScale(gray, 1.2, 3, minSize=(20, 20), flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
 
         # Draw a rectangle around the faces
         for (x, y, w, h) in faces:
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        #cv2.imshow('img',img)
+        cv2.imshow('img',img)
         imageFilename = os.path.basename(self.imagePath)
-        if not os.path.exists(settings.MEDIA_ROOT + 'face_detect/'):
-            os.makedirs(settings.MEDIA_ROOT + 'face_detect/', 777)
+        #if not os.path.exists(settings.MEDIA_ROOT + 'face_detect/'):
+            #os.makedirs(settings.MEDIA_ROOT + 'face_detect/', 777)
 
-        if len(faces) > 0:
-            cv2.imwrite(settings.MEDIA_ROOT + 'face_detect/' + imageFilename, img)
-            face_detect["result_image"] = settings.MEDIA_URL + 'face_detect/' + imageFilename
+        #if len(faces) > 0:
+            #cv2.imwrite(settings.MEDIA_ROOT + 'face_detect/' + imageFilename, img)
+            #face_detect["result_image"] = settings.MEDIA_URL + 'face_detect/' + imageFilename
 
         face_detect["face_count"] = len(faces)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
 
         return face_detect
 
@@ -54,9 +54,9 @@ class ImageProcessing(object):
 
         language = ""
         if len(text) > 3 != "":
-            languageCode = str(self.detectLanguage(text))
+            languageCode = self.detectLanguage(text)
             
-            if languageCode != "" and languageCode != "None":
+            if languageCode != "" and str(languageCode) != "None":
                 language = self.languageName(languageCode)
 
         textinfo = {}
@@ -93,10 +93,6 @@ class ImageProcessing(object):
 
                         duplicateImgRatio = float(duplicateImg[1]) * 100
                         if duplicateImgRatio >= 50:
-
-                            print duplicateImg[0]
-                            print duplicateImg[1]
-
                             duplicateImages.append(duplicateImg[0])
 
         return duplicateImages
