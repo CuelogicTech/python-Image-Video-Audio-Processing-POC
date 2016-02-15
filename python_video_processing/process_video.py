@@ -63,14 +63,6 @@ class processAudioVideo(object):
         width, height = videoClip.size
         videoQuality = self.getVideoQuality(width)
 
-        # print "=>Frames per second using: {0}".format(fps)
-        # print "=>Length of video: {0} minutes".format(length)
-        # print "=>Video resolution: height-> {0}, width-> {1}".format(height, width)
-        # if not response.strip():
-        #     print "=>Exception: Cannot detect the words"
-        # else:
-        #     print "=>Transcription: ", str(response)
-
         response_dict = {
             'fps'        : fps,
             'medialength': length,
@@ -113,12 +105,6 @@ class processAudioVideo(object):
         seconds = (len(sound) / 1000)
         actual_length = time.strftime("%H:%M:%S", time.gmtime(seconds))
         response = self.processMedia(seconds, self.fileType)
-
-        # print "=>Length of audio: {0} minutes".format(actual_length)
-        # if not response.strip():
-        #     print "=>Exception: Cannot detect the words"
-        # else:
-        #     print "=>Transcription: ", str(response)
 
         response_dict = {
             'fps' : 0,
@@ -183,7 +169,7 @@ class processAudioVideo(object):
             # recognize speech using Google Speech Recognition
             return r.recognize_google(audio) + ' '
         except:
-            # print("Could not understand audio") # speech is unintelligible
+            # speech is unintelligible
             return ''
 
     def getVideoQuality(self, width):
