@@ -13,6 +13,7 @@ html, body { height: 100%; padding: 0; margin: 0; }
 }
 .nav-sidebar .active a { 
     cursor: default;
+    background-color: #eee;
 }
 .nav-sidebar .text-overflow a,
 .nav-sidebar .text-overflow .media-body {
@@ -78,8 +79,9 @@ html, body { height: 100%; padding: 0; margin: 0; }
 }
 .img-responsive {
     display: block;
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
+    margin-left: 10%;
 }
 .box{
     display: inline-block;
@@ -139,3 +141,5 @@ html, body { height: 100%; padding: 0; margin: 0; }
     to { -moz-transform: rotate(360deg);}
 }
 /*Loader css end*/
+
+

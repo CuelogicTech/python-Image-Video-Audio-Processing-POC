@@ -26,9 +26,6 @@
     }
 
     $( "#fileupload" ).click(function() {
-        // Clear div and append loader on file upload
-        $('#loader').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
-        $('#imgupload').append("<h4>Loading Image ....</h4>");
         $('.carousel').css('display','none');
         $('#image_files').empty();
         $('#loader').empty();
@@ -37,25 +34,29 @@
         $("#imgtext").empty();
         $("#imgfaces").empty();
         $("#imgcor").empty();
+        // Clear div and append loader on file upload
+        $('#loader').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
+        $('#imgupload').append("<h4>Loading Image ....</h4>");
     });
 
     $( "#a_upload" ).click(function() {
-        // Clear div and append loader on file upload
-        $('#loader_audio').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
-        $('#audioup').append("<h4>Loading Audio ...</h4>");
         $('#audio_files').empty();
         $("#audioup").empty();
         $("#audtext").empty();
+        // Clear div and append loader on file upload
+        $('#loader_audio').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
+        $('#audioup').append("<h4>Loading Audio ...</h4>");
     });
     
     $( "#v_upload" ).click(function() {
-        // Clear div and append loader on file upload
-        $('#loader_video').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
-        $('#videoup').append("<h4>Loading Video ...</h4>");
+        $('#videoup').empty();
         $("#video_files").empty();
         $("#vidtext").empty();
         $("#framepersec").empty();
         $("#vidlength").empty();
+        // Clear div and append loader on file upload
+        $('#loader_video').append('&nbsp;<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="globalloadericon"></span>');
+        $('#videoup').append("<h4>Loading Video ...</h4>");
     });
 
     // Uploading Image files
@@ -131,7 +132,16 @@
             color_table += '<thead><tr><th>Color</th><th>Percentage analysed</th></thead>'
             color_table += '<tbody>'
             $.each(data.result.getImageColor, function (index, imagecolor) {
-                color_table += '<tr><td><span class="box" style="background-color:'+ index+'"></span>'+index+'</td>'+'<td>'+imagecolor+' % </td></tr>'
+                color_table += '<tr>'
+                for ( var i = 0, l = imagecolor.length;i<l;i++ ) {
+                        if ( i == 0 ){
+                            color_table += '<td><span class="box" style="background-color:'+ imagecolor[i]+'"></span>'+imagecolor[i]+'</td>'
+                        }
+                        else{
+                            color_table += '<td>'+imagecolor[i]+' % </td>'
+                        }
+                }
+                color_table += '</tr>'
             });
             color_table += '<tbody></table>'
             $('#imgColors').append(color_table);
@@ -143,9 +153,13 @@
                 progress + '%'
             );
         },
-        error: function (e, errors) {
+        error: function (e,data) {
+            console.log(data.e);
             $('#image_files').empty();
+            $('#imgupload').empty();
             $('<b style="color: red;">').text("Invalid File Type").appendTo('#image_files');
+            $('<b style="color: red;">').text("Upload a valid image. The file you uploaded was either not an image or a corrupted image.").appendTo('#imgupload');
+
         }
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -178,7 +192,7 @@
                     $('#audioup').append("<audio controls><source src="+file.url+" type='audio/mpeg'/></audio>");
                 });
                 // Text extracted from audio file
-                $('<p/>').text(data.result.message).appendTo("#audtext");
+                $('<b/>').text(data.result.message).appendTo("#audtext");
             }
         },
         progressall: function (e, data) {
@@ -189,7 +203,6 @@
             );
         },
         error: function (e, data) {
-            // Something went wrong
             $.each(data.result.files, function (index, file) {
                 $('<p/>').text("Invalid File type").appendTo('#audio_files');
             });
@@ -209,6 +222,7 @@
         },
         dataType: 'json',
         done: function (e, data) {
+            video_table =""
             $("#video_files").empty();
             $('#loader_video').empty();
             $("#videoup").empty();
@@ -225,8 +239,22 @@
                     $('<p/>').text(file.name).appendTo('#video_files');
                     $('#videoup').append("<video width='680' height='380' controls><source src="+file.url+" type='video/mp4'/></video>");
                 });
-                // Frame per sec
-                $('<b/>').text("Frame/sec: "+data.result.fps).appendTo('#framepersec');
+                // Video details eg:resolution,quality
+                video_table = '<table id="video_details" class="table table-striped">';
+                video_table += "<caption>Resolution Details</caption>"
+                video_table += '<tbody>'
+                video_table += "<tr><th>Height</th><th>"+data.result.height_video+" px</th></tr>"
+                video_table += "<tr><th>Width</th><th>"+data.result.width_video+" px</th></tr>"
+                video_table += "</tbody></table>"
+
+                video_table += '<table id="other_details" class="table table-striped">';
+                video_table += "<caption>Other Details</caption>"
+                video_table += '<tbody>'
+                video_table += "<tr><th>Video Quality</th><th>"+data.result.quality+"</th></tr>"
+                video_table += "</tbody></table>"
+
+                $('#framepersec').append(video_table);
+
                 // Text extracted from video
                 $('<b/>').text(data.result.message).appendTo('#vidtext');
                 // Video length

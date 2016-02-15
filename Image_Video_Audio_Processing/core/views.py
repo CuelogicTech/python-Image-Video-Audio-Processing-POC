@@ -25,6 +25,7 @@ class PictureCreateView(CreateView):
 
     def form_valid(self, form):
         temp = []
+        sortedcolors={}
         resultant_face_detected =""
         self.object = form.save()
         files = [serialize(self.object)]
@@ -42,6 +43,7 @@ class PictureCreateView(CreateView):
             extract_text = extract_text['text']
 
         getImageColor = imageprocessor.getImageColor()
+
         checkDuplicateImage = imageprocessor.checkDuplicateImage(settings.MEDIA_ROOT+'pictures/')
         for each in checkDuplicateImage:
             temp.append("media"+(each.split('/media')[1]))
@@ -54,10 +56,7 @@ class PictureCreateView(CreateView):
         return response
 
     def form_invalid(self, form):
-        print form.errors
-
-        data = {'errors': form.errors}
-        return HttpResponse(content=json.dumps(data), status=400, content_type='application/json')
+        return HttpResponse(content=json.dumps(form.errors), status=400, content_type='application/json')
 
 
 class BasicPictureCreateView(PictureCreateView):
@@ -78,8 +77,14 @@ class AudioCreateView(CreateView):
 
         if get_type == "audio":
             output_audio = audioprocessor.processAudio(get_type)
+
+            if len(output_audio['message']) == 0:
+                message = "Cannot detect the words"
+            else:
+                message = output_audio['message']
+
             data = {'files': files,
-                    'message' : output_audio['message']
+                   'message' : message
                 }
         else:
             data = {'files': files,
@@ -92,6 +97,7 @@ class AudioCreateView(CreateView):
 
     def form_invalid(self, form):
         data = json.dumps(form.errors)
+        print data
         return HttpResponse(content=data, status=400, content_type='application/json')
 
 
@@ -112,11 +118,25 @@ class VideoCreateView(CreateView):
         get_type = videoprocessor.validateExt()
         if get_type == "video":
             output_video = videoprocessor.processVideo(get_type)
-            data = {'files': files,
-                    'fps' : output_video['fps'],
-                    'medialength': output_video['medialength'],
-                    'message' : output_video['message']
-                    }
+            if 'fps' in output_video:
+
+                if len(output_video['message']) == 0:
+                    message = "Cannot detect the words"
+                else:
+                    message = output_video['message']
+
+                data = {'files': files,
+                        'fps' : output_video['fps'],
+                        'medialength': output_video['medialength'],
+                        'message' : message,
+                        'height_video' :output_video['height'],
+                        'width_video':output_video['width'],
+                        'quality':output_video['quality']
+                        }
+            else:
+                data = {'files': files,
+                        'error':output_video['error']
+                        }
         else:
             data = {'files': files,
                     'error':"Invalid File Format"
