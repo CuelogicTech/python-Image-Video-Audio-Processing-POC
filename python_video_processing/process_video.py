@@ -29,7 +29,6 @@ class processAudioVideo(object):
         self.fileName = file_split_path[0]
 
     def processVideo(self, mediaType):
-
         video = cv2.VideoCapture(self.filePath)
         self.fileType = mediaType
 
@@ -104,7 +103,6 @@ class processAudioVideo(object):
         return fps, minutes, seconds
 
     def processAudio(self, mediaType):
-        
         self.fileType = mediaType
         sound = AudioSegment.from_file(self.filePath)
         sound.export(self.audioDirectory + self.fileName + '.wav', format="wav")
@@ -203,7 +201,6 @@ class processAudioVideo(object):
         return height, width
 
     def validateExt(self):
-
         file_path, filename = os.path.split(self.filePath)
         shortname, extension = os.path.splitext(filename)
         is_path_exists = os.path.isfile(self.filePath)
