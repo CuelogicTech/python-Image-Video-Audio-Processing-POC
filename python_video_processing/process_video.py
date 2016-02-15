@@ -29,6 +29,7 @@ class processAudioVideo(object):
         self.fileName = file_split_path[0]
 
     def processVideo(self, mediaType):
+        
         video = cv2.VideoCapture(self.filePath)
         self.fileType = mediaType
 
@@ -43,6 +44,7 @@ class processAudioVideo(object):
                 response_dict = {
                     'error' : 'The video file is seems to be corrupted, please upload another file.'
                 }
+                return response_dict
 
             total_frame_count = video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
@@ -55,7 +57,8 @@ class processAudioVideo(object):
                 response_dict = {
                     'error' : 'The video file is seems to be corrupted, please upload another file.'
                 }
-            
+                return response_dict
+                
             total_frame_count = video.get(cv2.cv.CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
