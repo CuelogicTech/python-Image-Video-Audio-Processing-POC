@@ -61,6 +61,7 @@ class processAudioVideo(object):
 
         response = self.processMedia(seconds, self.fileType)
         width, height = videoClip.size
+        videoQuality = self.getVideoQuality(width)
 
         # print "=>Frames per second using: {0}".format(fps)
         # print "=>Length of video: {0} minutes".format(length)
@@ -71,11 +72,12 @@ class processAudioVideo(object):
         #     print "=>Transcription: ", str(response)
 
         response_dict = {
-            'fps' : fps,
+            'fps'        : fps,
             'medialength': length,
-            'message' : str(response),
-            'height'  : height,
-            'width'   : width
+            'message'    : str(response),
+            'height'     : height,
+            'width'      : width,
+            'quality'    : videoQuality
         }
         return response_dict
 
@@ -183,6 +185,20 @@ class processAudioVideo(object):
         except:
             # print("Could not understand audio") # speech is unintelligible
             return ''
+
+    def getVideoQuality(self, width):
+        width = int(width)
+        if width < 470:
+            return 'Standard Defination Quality'
+        elif width > 470 and width < 710:
+            return 'Enhanced Defination Quality'
+        elif width > 710 and width < 2000:
+            return 'High Defination Quality'
+        elif width > 2000 and width < 8650:
+            return 'Ultra High Defination Quality'
+        else:
+            return 'Low Quality'
+
 
     def validateExt(self):
         file_path, filename = os.path.split(self.filePath)
