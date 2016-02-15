@@ -34,7 +34,7 @@ class ImageProcessing(object):
         for (x, y, w, h) in faces:
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        # cv2.imshow('img',img)
+        #cv2.imshow('img',img)
         imageFilename = os.path.basename(self.imagePath)
         if not os.path.exists(settings.MEDIA_ROOT + 'face_detect/'):
             os.makedirs(settings.MEDIA_ROOT + 'face_detect/', 777)
@@ -44,7 +44,7 @@ class ImageProcessing(object):
             face_detect["result_image"] = settings.MEDIA_URL + 'face_detect/' + imageFilename
 
         face_detect["face_count"] = len(faces)
-        # cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         return face_detect
 
@@ -54,8 +54,10 @@ class ImageProcessing(object):
 
         language = ""
         if len(text) > 3 != "":
-            languageCode = self.detectLanguage(text)
-            language = self.languageName(languageCode)
+            languageCode = str(self.detectLanguage(text))
+            
+            if languageCode != "" and languageCode != "None":
+                language = self.languageName(languageCode)
 
         textinfo = {}
         textinfo["text"] = text
@@ -91,6 +93,10 @@ class ImageProcessing(object):
 
                         duplicateImgRatio = float(duplicateImg[1]) * 100
                         if duplicateImgRatio >= 50:
+
+                            print duplicateImg[0]
+                            print duplicateImg[1]
+
                             duplicateImages.append(duplicateImg[0])
 
         return duplicateImages
@@ -140,6 +146,7 @@ class ImageProcessing(object):
         clorsPercentage["purple"] = round((purple_color / float(total_color)) * 100, 4)
         clorsPercentage["brown"] = round((brown_color / float(total_color)) * 100, 4)
 
+        # print sorted(clorsPercentage.items(), key=lambda (k,v): (v,k))[::-1]
         return clorsPercentage
 
     def imageValidation(self):
@@ -160,8 +167,8 @@ class ImageProcessing(object):
 
     def languageName(slef, languageCode):
 
-        languageDict = {'af' : 'Afrikaans', 'sq' : 'Albanian', 'ar' : 'Arabic', 'hy' : 'Armenian', 'az' : 'Azerbaijani', 'eu' : 'Basque', 'be' : 'Belarusian', 'bn' : 'Bengali', 'bs' : 'Bosnian', 'bg' : 'Bulgarian', 'ca' : 'Catalan', 'ceb' : 'Cebuano', 'ny' : 'Chichewa', 'zh-CN' : 'Chinese', 'zh-TW' : 'Chinese', 'hr' : 'Croatian', 'cs' : 'Czech', 'da' : 'Danish', 'nl' : 'Dutch', 'en' : 'English', 'eo' : 'Esperanto', 'et' : 'Estonian', 'fil' : 'Filipino', 'tl' : 'Finnish', 'fr' : 'French', 'gl' : 'Galician', 'ka' : 'Georgian', 'de' : 'German', 'el' : 'Greek', 'gu' : 'Gujarati', 'ht' : 'Haitian', 'ha' : 'Hausa', 'iw' : 'Hebrew', 'hi' : 'Hindi', 'hmn' : 'Hmong', 'hu' : 'Hungarian', 'is' : 'Icelandic', 'ig' : 'Igbo', 'id' : 'Indonesian', 'ga' : 'Irish', 'it' : 'Italian', 'ja' : 'Japanese', 'jw' : 'Javanese', 'kn' : 'Kannada', 'kk' : 'Kazakh', 'km' : 'Khmer', 'ko' : 'Korean', 'lo' : 'Lao', 'la' : 'Latin', 'lv' : 'Latvian', 'lt' : 'Lithuanian', 'mk' : 'Macedonian', 'mg' : 'Malagasy', 'ms' : 'Malay', 'ml' : 'Malayalam', 'mt' : 'Maltese', 'mi' : 'Maori', 'mr' : 'Marathi', 'mn' : 'Mongolian', 'my' : 'Myanmar', 'ne' : 'Nepali', 'no' : 'Norwegian', 'fa' : 'Persian', 'pl' : 'Polish', 'pt' : 'Portuguese', 'pa' : 'Punjabi', 'ro' : 'Romanian', 'ru' : 'Russian', 'sr' : 'Serbian', 'st' : 'Sesotho', 'si' : 'Sinhala', 'sk' : 'Slovak', 'sl' : 'Slovenian', 'so' : 'Somali', 'es' : 'Spanish', 'su' : 'Sudanese', 'sw' : 'Swahili', 'sv' : 'Swedish', 'tg' : 'Tajik', 'ta' : 'Tamil', 'te' : 'Telugu', 'th' : 'Thai', 'tr' : 'Turkish', 'uk' : 'Ukrainian', 'ur' : 'Urdu', 'uz' : 'Uzbek', 'vi' : 'Vietnamese', 'cy' : 'Welsh', 'yi' : 'Yiddish', 'yo' : 'Yoruba', 'zu' : 'Zulu'}
-
+        languageDict = {'af' : 'Afrikaans', 'sq' : 'Albanian', 'ar' : 'Arabic', 'hy' : 'Armenian', 'az' : 'Azerbaijani', 'eu' : 'Basque', 'be' : 'Belarusian', 'bn' : 'Bengali', 'bs' : 'Bosnian', 'bg' : 'Bulgarian', 'ca' : 'Catalan', 'ceb' : 'Cebuano', 'ny' : 'Chichewa', 'zh-CN' : 'Chinese', 'zh-TW' : 'Chinese', 'hr' : 'Croatian', 'cs' : 'Czech', 'da' : 'Danish', 'nl' : 'Dutch', 'en' : 'English', 'eo' : 'Esperanto', 'et' : 'Estonian', 'fil' : 'Filipino', 'tl' : 'Finnish', 'fr' : 'French', 'gl' : 'Galician', 'ka' : 'Georgian', 'de' : 'German', 'el' : 'Greek', 'gu' : 'Gujarati', 'ht' : 'Haitian', 'ha' : 'Hausa', 'iw' : 'Hebrew', 'hi' : 'Hindi', 'hmn' : 'Hmong', 'hu' : 'Hungarian', 'is' : 'Icelandic', 'ig' : 'Igbo', 'id' : 'Indonesian', 'ga' : 'Irish', 'it' : 'Italian', 'ja' : 'Japanese', 'jw' : 'Javanese', 'kn' : 'Kannada', 'kk' : 'Kazakh', 'km' : 'Khmer', 'ko' : 'Korean', 'lo' : 'Lao', 'la' : 'Latin', 'lv' : 'Latvian', 'lt' : 'Lithuanian', 'mk' : 'Macedonian', 'mg' : 'Malagasy', 'ms' : 'Malay', 'ml' : 'Malayalam', 'mt' : 'Maltese', 'mi' : 'Maori', 'mr' : 'Marathi', 'mn' : 'Mongolian', 'my' : 'Myanmar', 'ne' : 'Nepali', 'no' : 'Norwegian', 'fa' : 'Persian', 'pl' : 'Polish', 'pt' : 'Portuguese', 'pa' : 'Punjabi', 'ro' : 'Romanian', 'ru' : 'Russian', 'sr' : 'Serbian', 'st' : 'Sesotho', 'si' : 'Sinhala', 'sk' : 'Slovak', 'sl' : 'Slovenian', 'so' : 'Somali', 'es' : 'Spanish', 'su' : 'Sudanese', 'sw' : 'Swahili', 'sv' : 'Swedish', 'tg' : 'Tajik', 'ta' : 'Tamil', 'te' : 'Telugu', 'th' : 'Thai', 'tr' : 'Turkish', 'uk' : 'Ukrainian', 'ur' : 'Urdu', 'uz' : 'Uzbek', 'vi' : 'Vietnamese', 'cy' : 'Welsh', 'yi' : 'Yiddish', 'yo' : 'Yoruba', 'zu' : 'Zulu', 'None' : ''}
+        
         return languageDict[languageCode]
 
 
