@@ -1,0 +1,30 @@
+#
+####### image-processing-requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+OpenCv 
+sudo pip install tesseract
+sudo apt-get install imagemagick
+sudo pip install Pillow
+sudo pip install pytesseract
+
+sudo pip install -U scikit-image
+sudo apt-get install python-scipy
+sudo pip install -U numpy
+sudo pip install pyssim
+#
+###### Requirements with Version Specifiers ######
+#   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
+
+###### Refer to other requirements files ######
+#
+
+###### A particular file ######
+#
+
+###### Additional Requirements without Version Specifiers ######
+#
+
+
+
+
