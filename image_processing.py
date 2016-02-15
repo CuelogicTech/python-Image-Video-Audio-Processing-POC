@@ -6,7 +6,7 @@ from PIL import Image
 from pytesseract import *
 from subprocess import check_output
 from textblob import TextBlob
-#from django.conf import settings
+from django.conf import settings
 
 class ImageProcessing(object):
 
@@ -36,12 +36,12 @@ class ImageProcessing(object):
 
         cv2.imshow('img',img)
         imageFilename = os.path.basename(self.imagePath)
-        #if not os.path.exists(settings.MEDIA_ROOT + 'face_detect/'):
-            #os.makedirs(settings.MEDIA_ROOT + 'face_detect/', 777)
+        if not os.path.exists(settings.MEDIA_ROOT + 'face_detect/'):
+            os.makedirs(settings.MEDIA_ROOT + 'face_detect/', 777)
 
-        #if len(faces) > 0:
-            #cv2.imwrite(settings.MEDIA_ROOT + 'face_detect/' + imageFilename, img)
-            #face_detect["result_image"] = settings.MEDIA_URL + 'face_detect/' + imageFilename
+        if len(faces) > 0:
+            cv2.imwrite(settings.MEDIA_ROOT + 'face_detect/' + imageFilename, img)
+            face_detect["result_image"] = settings.MEDIA_URL + 'face_detect/' + imageFilename
 
         face_detect["face_count"] = len(faces)
         cv2.waitKey(0)
@@ -142,8 +142,7 @@ class ImageProcessing(object):
         clorsPercentage["purple"] = round((purple_color / float(total_color)) * 100, 4)
         clorsPercentage["brown"] = round((brown_color / float(total_color)) * 100, 4)
 
-        # print sorted(clorsPercentage.items(), key=lambda (k,v): (v,k))[::-1]
-        return clorsPercentage
+        return sorted(clorsPercentage.items(), key=lambda (k,v): (v,k))[::-1]
 
     def imageValidation(self):
 
