@@ -31,6 +31,7 @@ class processAudioVideo(object):
     def processVideo(self, mediaType):
         
         video = cv2.VideoCapture(self.filePath)
+        videoClip = mp.VideoFileClip(self.filePath)
         self.fileType = mediaType
 
         # Find OpenCV version
@@ -58,12 +59,12 @@ class processAudioVideo(object):
                     'error' : 'The video file is seems to be corrupted, please upload another file.'
                 }
                 return response_dict
-                
+
             total_frame_count = video.get(cv2.cv.CAP_PROP_FRAME_COUNT)
             fps, length, seconds = self.calculateVideoLengthAndFps(video, total_frame_count, fps)
 
         response = self.processMedia(seconds, self.fileType)
-        height, width = self.findVideoResolution()
+        width, height = videoClip.size
 
         # print "=>Frames per second using: {0}".format(fps)
         # print "=>Length of video: {0} minutes".format(length)
@@ -186,22 +187,6 @@ class processAudioVideo(object):
         except:
             # print("Could not understand audio") # speech is unintelligible
             return ''
-
-
-    # function to find the resolution of the input video file
-    def findVideoResolution(self):
-        cmd = "ffprobe -v quiet -print_format json -show_streams"
-        args = shlex.split(cmd)
-        args.append(self.filePath)
-        # run the ffprobe process, decode stdout into utf-8 & convert to JSON
-        ffprobeOutput = subprocess.check_output(args).decode('utf-8')
-        ffprobeOutput = json.loads(ffprobeOutput)
-
-        # find height and width
-        height = ffprobeOutput['streams'][0]['height']
-        width = ffprobeOutput['streams'][0]['width']
-
-        return height, width
 
     def validateExt(self):
         file_path, filename = os.path.split(self.filePath)
