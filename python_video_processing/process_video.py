@@ -41,7 +41,7 @@ class processAudioVideo(object):
 
             if str(fps) == 'nan':
                 # print 'The video file is seems to be corrupted, please upload another file.'
-                return response_dict = {
+                response_dict = {
                     'error' : 'The video file is seems to be corrupted, please upload another file.'
                 }
 
@@ -53,7 +53,7 @@ class processAudioVideo(object):
             
             if str(fps) == 'nan':
                 # print 'The video file is seems to be corrupted, please upload another file.'
-                return response_dict = {
+                response_dict = {
                     'error' : 'The video file is seems to be corrupted, please upload another file.'
                 }
             
@@ -104,7 +104,7 @@ class processAudioVideo(object):
         return fps, minutes, seconds
 
     def processAudio(self, mediaType):
-
+        
         self.fileType = mediaType
         sound = AudioSegment.from_file(self.filePath)
         sound.export(self.audioDirectory + self.fileName + '.wav', format="wav")
@@ -209,9 +209,10 @@ class processAudioVideo(object):
         is_path_exists = os.path.isfile(self.filePath)
         
         if not is_path_exists:
-            return response_dict = {
+            response_dict = {
                 'error' : 'File doesn\'t exists.'
             }
+            return response_dict
 
         video_extension_list = ['.mp4']
         audio_extension_list = ['.wav', '.mp3', '.ogg', '.mpeg', '.wma', '.m4a']
