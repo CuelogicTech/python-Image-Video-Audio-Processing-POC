@@ -1,0 +1,174 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cuelogic | {% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" type="text/css" href="http://getbootstrap.com.vn/examples/equal-height-columns/equal-height-columns.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+  </head>
+
+  <body>
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Cuelogic</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Help</a></li>
+              </ul>
+              <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+              </form>
+            </div>
+          </div>
+      </nav>
+      <div class="row">
+        <div class="col-md-3 border-right" id="leftCol">
+          <nav class="nav-sidebar">
+            <ul class="nav nav-stacked" id="sidebar">
+              <li class="active"><a data-toggle="tab" href="#img">Image</a></li>
+              <li><a data-toggle="tab" href="#audio">Audio</a></li>
+              <li><a data-toggle="tab" href="#video">Video</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9 tab-content" id="mainCol">
+        <div id="img" class="tab-pane fade in active">
+          <h2><span class="fui-image"></span>Upload Image</h2>
+          <div class="well">
+            <p>Upload an Image to proceed with Image Processing</p>
+              <input id="fileupload" type="file" value="" accept="image/*">
+              <br>
+              <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+              </div>
+              <div id="image_files" class="files"></div>
+          </div>
+          <br>
+          <div class="container">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#imgupload">Image</a></li>
+              <li><a data-toggle="tab" href="#imgColors">Colors</a></li>
+              <li><a data-toggle="tab" href="#imgtext">Text Recognized</a></li>
+              <li><a data-toggle="tab" href="#imgfaces">Faces Recogized</a></li>
+              <li><a data-toggle="tab" href="#dupimages">Duplicate images</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="imgupload" class="tab-pane fade in active">
+                <div id="loader">
+                </div>
+              </div>
+              <div id="imgColors" class="tab-pane fade">
+                <h4>Colors</h4>
+              </div>
+              <div id="imgtext" class="tab-pane fade">
+                <h4>Text Recognized</h4>
+              </div>
+              <div id="imgfaces" class="tab-pane fade">
+                <h4>Faces Recogized</h4>
+              </div>
+              <div id="dupimages" class="tab-pane fade">
+                <h4>Duplicate Images</h4>
+                  <div class="col-lg-12 cor-col">
+                    <div class="carousel slide" id="myCarousel">
+                      <div class="carousel-inner" id="imgcor">
+                      </div>
+                      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left id_slider"></i></a>
+                      <a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right id_slider"></i></a>
+                    </div>
+                    <div id="count"></div>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="audio" class="tab-pane fade">
+          <h2>Upload Audio</h2>
+          <div class="well">
+            <p>Upload an Audio to proceed with Audio Processing</p>
+            <input id="a_upload" type="file" accept="audio/*">
+            <br>
+             <div id="audio_progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+             </div>
+             <div id="audio_files"></div>
+          </div>
+          <br>
+          <div class="container">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#audioup">Audio</a></li>
+              <li><a data-toggle="tab" href="#audtext">Text Recognized</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="audioup" class="tab-pane fade in active">
+                <div id="loader_audio">
+                </div>
+              </div>
+              <div id="audtext" class="tab-pane fade">
+                <h5>Text Recognized</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="video" class="tab-pane fade">
+          <h2>Upload Video</h2>
+          <div class="well">
+            <p>Upload an video to proceed with Video Processing</p>
+            <input id="v_upload" type="file" accept="video/*">
+            <br>
+            <div id="video_progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div id="video_files"></div>
+          </div>
+          <br>
+          <div class="container">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#videoup">Video</a></li>
+              <li><a data-toggle="tab" href="#vidtext">Text Recognized</a></li>
+              <li><a data-toggle="tab" href="#vidlength">Video Length</a></li>
+              <li><a data-toggle="tab" href="#framepersec">Video Details</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="videoup" class="tab-pane fade in active">
+                <div id="loader_video">
+                </div>
+              </div>
+              <div id="vidtext" class="tab-pane fade">
+                <h3>Text Recognized</h3>
+              </div>
+              <div id="framepersec" class="tab-pane fade">
+                <h3>Video Details</h3>
+              </div>
+              <div id="vidlength" class="tab-pane fade">
+                <h3>Video Length</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ===================================a=============== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.ui.widget.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fileupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </body>
+</html>
