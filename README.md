@@ -3,6 +3,7 @@ Phase 1
 Basic Image/Audio/Video Processing
 -------------------------------------------------------------------------------------
 
+
 Media Type:
 1. Image
 2. Video
@@ -32,6 +33,8 @@ Media Type:
    - Covert audio to text
    - Text analysis
    - Find out language from text
+
+
 -------------------------------------------------------------------------------------
 Phase 2
 Image/Video Search Engine
