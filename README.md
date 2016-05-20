@@ -91,4 +91,11 @@ Image storage & Metadata Extraction
 2. http://www.cise.ufl.edu/~sahni/papers/encycloimage.pdf
 3. http://stackoverflow.com/questions/18948382/run-length-encoding-in-python
 
+Image Comparison Methods
+1. http://stackoverflow.com/questions/843972/image-comparison-fast-algorithm
+2. http://www.pyimagesearch.com/2014/12/01/complete-guide-building-image-search-engine-python-opencv/
+3. http://www.pyimagesearch.com/2014/01/15/the-3-types-of-image-search-engines-search-by-meta-data-search-by-example-and-hybrid/
+4. http://effbot.org/zone/pil-comparing-images.htm
+5. http://www.imagemagick.org/Usage/compare/
+
 
