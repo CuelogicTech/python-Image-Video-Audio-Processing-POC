@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description"  content="ImageSearch collects the best user interface designs and provides a search engine for you to find the similar images that you need." />
+        <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css"/>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+        <script type="text/javascript" src="/static/js/file-uploader.js"></script>
+    </head>
+    <body class="home blog" ng-app = "myApp" ng-controller = "myCtrl">
+        <div class="header-wrap">
+            <div class="header">
+                <ul class="nav clearfix">
+                    <li class="item"><a href=""></a></li>
+                    <li class="item compact">
+                        <div class="menu menu-right">
+                            <div class="block">
+                                <ul class="sub-menu">
+                                    <li><a href="">Browse</a></li>
+                                    <li><a href="">Submit</a></li>
+                                    <li><a href="">About</a></li>
+                                    <li><a href="">Feedback</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item screen"><a href="">BROWSE</a></li>
+                    <li class="item right">
+                        <form class="form-search" name="search_form" method="get" id="searchform" action="#">
+                            <input type="text" value="" placeholder="Enter metadata keywords" name="s" id="s" />
+                            <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search"/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <span id="top"></span>  
+        <div class="content-wrap background-1">
+            <div class="content master-width clearfix">
+                {% url 'core:home' as home %}
+                {% url 'core:search' as search %}
+                {% ifequal request.path search %}
+                    {% include "updated_search_form.html" %}
+                {% else %}
+                    {% include "search_form.html" %}
+                {% endifequal %}
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function ChangeText(oFileInput, sTargetID) {
+            document.getElementById(sTargetID).value = oFileInput.value;
+        }
+    </script>
+</html>
