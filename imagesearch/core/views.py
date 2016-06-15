@@ -38,3 +38,19 @@ def upload_file(request):
             return HttpResponse(msg)
     else:
         return render(request, 'base.html', {})
+
+def upload_file_bank(request):
+    if request.method == 'POST':
+        is_file = request.FILES.get('file')
+        if is_file:
+            path = default_storage.save(settings.MEDIA_ROOT + '/'
+                    + str(is_file.name), ContentFile(is_file.read()))
+            msg = 'File has been uploaded'
+            response = {'filename': is_file.name,
+                        'media_url': settings.MEDIA_URL}
+            return HttpResponse(json.dumps(response))
+        else:
+            msg = 'Something has went wrong, please try again.'
+            return HttpResponse(msg)
+    else:
+        return render(request, 'base.html', {})

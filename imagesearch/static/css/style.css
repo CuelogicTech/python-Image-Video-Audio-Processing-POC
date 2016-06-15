@@ -19,7 +19,7 @@ ol,ul { margin-left: 2em; line-height: 150%; }
 .master-width { margin: 0 auto; }
 .header-wrap { width: 100%; background: #4D4D4D; position: fixed; z-index: 999; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 .header { margin: 0 auto; padding: 8px; }
-.content-wrap { width: 100%; padding: 32px 0 16px; box-shadow: 0 0 6px rgba(0, 0, 0, .3); }
+.content-wrap { width: 100%; padding: 32px 0 92px; box-shadow: 0 0 6px rgba(0, 0, 0, .3); }
 .content { padding: 48px 0 16px; min-height: 600px; }
 .content-main { width: 78%; float: left; padding-bottom: 16px; }
 .sidebar { width: 20%; float: right; }
@@ -34,7 +34,7 @@ ol,ul { margin-left: 2em; line-height: 150%; }
 .home .content { max-width: 960px; text-align: center; background-image: none; }
 .home .content h2 { margin: 8px 0; font-size: 18px; }
 .home .search { position: relative; left: auto; top: auto; width: 100%; margin: 50px auto; text-align: center; line-height: 200%; }
-.home .search-input { color: #999; margin-bottom: 8px; min-width: 36%; }
+.home .search-input { color: #999; margin-bottom: 8px; min-width: 30%; height: 0%;}
 .home .search-input:focus { color: #333;}
 .home .search p { font-size: 14px; margin: 16px 0; }
 
@@ -511,8 +511,8 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
     unicode-bidi: embed;
     white-space: nowrap;
     display: block;
-    margin-top: -55.5px;
-    margin-left: -21%;
+    margin-top: -52.5px;
+    margin-left: -257px;
 }
 .sbibtd {
     line-height: 0;
@@ -529,7 +529,7 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
 
 .up_search{
     margin-top: -12%;
-    margin-left: -38%;
+    margin-left: -48%;
 }
 .btn-file {
     position: relative;
@@ -561,13 +561,13 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
 .row_img{
     margin-left: -7%;
     margin-top: 4%;
-    background-color: rgba(0, 0, 0, 0.04); 
 }
 div.img {
     margin-top: 2%;
     float: left;
     width: 180px;
     height: 150px;
+
 }
 
 div.img:hover {
@@ -578,6 +578,7 @@ div.img img {
     width: 180px;
     height: 150px;
     border: 1px solid #ddd;
+    height: 100%;
 }
 
 div.desc {
@@ -595,4 +596,36 @@ div.desc {
 }
 .fa-cog{
     font-size: large;
+}
+#logo{
+    font-size: x-large;
+    font-family: monospace;
+}
+#s{
+    text-align: center;
+    height: 35px;
+    font-size: 70%;
+}
+.home .content h2 {
+    margin: 8px 0;
+    font-size: 18px;
+}
+#header_title {
+    font-size: 29px;
+    font-family: Cambria, Georgia, serif;
+    margin-bottom: -1%;
+}
+#base_title {
+    font-size: 22px;
+    font-family: Cambria, Georgia, serif;
+}
+#searchsubmit{
+    margin-top: -2px;
+    height: 34px;
+}
+.gscp_a {
+    height:35px;
+}
+#modal_txt{
+    min-width: 76%;
 }

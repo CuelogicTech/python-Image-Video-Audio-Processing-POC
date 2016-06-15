@@ -43,11 +43,43 @@ myApp.service('fileUpload', ['$http', function ($http) {
     }
 }]);
 
-myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+myApp.service('bankUpload', ['$http', function ($http) {
+    this.uploadFileToBank = function(file, uploadUrl){
+        var fileData = new FormData();
+        fileData.append('file', file)
+      
+        $http.post(uploadUrl, fileData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+  
+        .success(function(msg){
+            // alert(msg);
+            if (msg['filename']){
+                alert('File Uploaded');
+            }
+            else{
+                alert('Upload a file to proceed with search');
+            }
+            return false;
+        })
+        .error(function(msg){
+            alert(msg);
+        });
+    }
+}]);
+
+myApp.controller('myCtrl', ['$scope', 'fileUpload', 'bankUpload', function($scope, fileUpload, bankUpload){
     $scope.uploadFile = function(){
         var file = $scope.myFile;
         console.log(file);
         var uploadUrl = "core/fileupload/upload-file/";
         fileUpload.uploadFileToUrl(file, uploadUrl);
+    };
+    $scope.uploadBank = function(){
+        var file = $scope.myFile;
+        console.log(file);
+        var uploadUrl = "core/fileupload/upload-file-bank/";
+        bankUpload.uploadFileToBank(file, uploadUrl);
     };
 }]);

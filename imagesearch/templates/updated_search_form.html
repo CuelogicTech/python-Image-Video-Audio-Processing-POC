@@ -2,14 +2,14 @@
 <form class="up_search" name="search_form" method="get" id="searchform">
     <span>
         <h1>
-            <h1 id="base_title" >ImageSearch
-            	<input class="search-input tab" type="text" value="" name="s" id="s" onclick ="javascript:document.getElementById('file').click();"/>
-                <input class="btn" type="submit" name="submit" id="searchsubmit" value="Upload" ng-click = "uploadFile()"/>
-            </h1>
+            <h2 id="base_title" >ImageSearch
+            	<input class="search-input tab" type="text" value="                           Choose file" name="s" id="s" onclick ="javascript:document.getElementById('file').click();"/>
+                <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search" ng-click = "uploadFile()"/>
+            </h2>
         </h1>
     </span>
     {% if image_name %}
-    <div class="sbib_d" id="sb_chc0"><a class="gscp_a" href="#" style="margin: 1px; line-height: 34px; height: 30px;"><img class="gscp_f" src={{media_url}}/{{image_name}} width="41" height="30" style="margin-bottom: 5px; "><span class="gscp_e"></span><span class="gscp_c">{{image_name}}</span><span class="gscp_d">×</span></a></div>
+    <div class="sbib_d" id="sb_chc0"><a class="gscp_a" href="#" style="margin: 1px; line-height: 34px; height: 35px;"><img class="gscp_f" src={{media_url}}/{{image_name}} width="41" height="30" style="margin-bottom: 5px; "><span class="gscp_e"></span><span class="gscp_c">{{image_name}}</span><span class="gscp_d">×</span></a></div>
     {% endif %}
 </form>
 <input id = "file" type="file" style='visibility: hidden;' name="img" file-model = "myFile" onchange="ChangeText(this, 'txt');"/>
