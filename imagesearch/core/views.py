@@ -57,25 +57,24 @@ def search(request):
         file_path = join(settings.MEDIA_ROOT, img_name)
         file = open(file_path, 'r+')
         if file:
-            try:
-                with wand.image.Image(filename=file_path) as img:
-                    img.resize(256, 256)
-                    img.save(filename=file_path)
-                matches = im.match(file_path, limit=10)
-                json.dumps(matches)
-                return render(request, 'base.html',
-                              {'media_url': settings.MEDIA_URL,
-                              'image_name': img_name,
-                              'image_matches': json.dumps(matches)}
-                            )
+            # try:
+            with wand.image.Image(filename=file_path) as img:
+                img.resize(256, 256)
+                img.save(filename=file_path)
+            matches = im.match(file_path, limit=10)
+            return render(request, 'base.html',
+                          {'media_url': settings.MEDIA_URL,
+                          'image_name': img_name,
+                          'image_matches': matches}
+                        )
 
-            except:
-                traceback.print_exc()
-                return render(request, 'base.html',
-                              {'media_url': settings.MEDIA_URL,
-                              'image_name': img_name,
-                              'image_matches': []}
-                            )
+            # except:
+            #     traceback.print_exc()
+            #     return render(request, 'base.html',
+            #                   {'media_url': settings.MEDIA_URL,
+            #                   'image_name': img_name,
+            #                   'image_matches': []}
+            #                 )
 
 
 @csrf_exempt
@@ -96,16 +95,14 @@ def upload_file(request):
     else:
         return render(request, 'base.html', {})
 
-def upload_to_bank():
+def upload_file_bank(request):
     # Save images in the bank
     if request.method == 'POST':
-        file = request.files['file']
+        file = request.FILES.get('file')
         if file:
             # Create the temporary file for search operation
-            tmpfile = join(
-                tempfile.gettempdir(),
-                file.name
-            )
+            file_path = default_storage.save(settings.MEDIA_ROOT + '/'
+                    + str(file.name), ContentFile(file.read()))
             guid = str(uuid.uuid4().get_hex().upper()[0:12]) + '.jpg'
             dstfile = join(
                 BANK_PATH,
@@ -115,26 +112,14 @@ def upload_to_bank():
                 BANK_THUMB_PATH,
                 guid
             )
-            file.save(tmpfile)
             try:
-                with wand.image.Image(filename=tmpfile) as img:
+                with wand.image.Image(filename=file_path) as img:
                     img.save(filename=dstfile)
                     img.resize(256, 256)
                     img.save(filename=dstfile_thumb)
                     im.add_image(dstfile_thumb)
             except wand.exceptions.MissingDelegateError:
-                return render(request, 'base.html', {'success':False ,'error': 'input is not a valid image'})
-            return render(request, 'base.html', {'success':True ,'error': ''})
+                return HttpResponse(json.dumps({'success':False ,'error': 'input is not a valid image'}))
+            return HttpResponse(json.dumps({'success':True ,'error': ''}))
+        return HttpResponse( json.dumps({'success':False ,'error': 'Not a valid image file'}))
 
-    # elif request.method == 'GET':
-    #     limit = 10
-    #     try:
-    #         limit = int(request.args.get('limit', '10'))
-    #     except ValueError:
-    #         pass
-    #     files = get_bank_images()
-    #     return render(request, 'base.html', {'success':True ,'count' : im.get_count(),
-    #         'latest' : ['/'+f for f in files[0:limit]]})json.dumps({
-            
-    #         })
-    return render(request, 'base.html', {'success':False ,'error': 'Not a valid image file'})
