@@ -30,7 +30,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
         .success(function(msg){
             // alert(msg);
             if (msg['filename']){
-                window.location = "core/search/"+"?f="+msg['filename'];
+                window.location = "/core/search/"+"?f="+msg['filename'];
             }
             else{
                 alert('Upload a file to proceed with search')

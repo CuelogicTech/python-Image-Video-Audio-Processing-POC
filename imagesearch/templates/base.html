@@ -6,6 +6,7 @@
         <meta name="description"  content="ImageSearch collects the best user interface designs and provides a search engine for you to find the similar images that you need." />
         <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css"/>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
         <script type="text/javascript" src="/static/js/file-uploader.js"></script>
@@ -29,10 +30,7 @@
                     </li>
                     <li class="item screen"><a href="">BROWSE</a></li>
                     <li class="item right">
-                        <form class="form-search" name="search_form" method="get" id="searchform" action="#">
-                            <input type="text" value="" placeholder="Enter metadata keywords" name="s" id="s" />
-                            <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search"/>
-                        </form>
+                    <a href=""><i class="fa fa-cog" aria-hidden="true"></i></a>
                     </li>
                 </ul>
             </div>
@@ -46,6 +44,7 @@
                     {% include "updated_search_form.html" %}
                 {% else %}
                     {% include "search_form.html" %}
+                    <a href=""><i class="fi-widget"></i></a>
                 {% endifequal %}
             </div>
         </div>
