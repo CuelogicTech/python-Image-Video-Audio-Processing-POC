@@ -62,6 +62,7 @@ def search(request):
                 img.resize(256, 256)
                 img.save(filename=file_path)
             matches = im.match(file_path, limit=10)
+            print len(matches)
             return render(request, 'base.html',
                           {'media_url': settings.MEDIA_URL,
                           'image_name': img_name,
@@ -82,6 +83,7 @@ def upload_file(request):
     # Save the image object in the media folder and proceed to search
     if request.method == 'POST':
         is_file = request.FILES.get('file')
+        print is_file
         if is_file:
             if not os.path.exists(settings.MEDIA_ROOT + '/' + str(is_file.name)):
                 default_storage.save(settings.MEDIA_ROOT + '/'

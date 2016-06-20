@@ -30,24 +30,26 @@
                             </div>
                         </div>
                     </li>
-                    <li class="item screen"><a href=""><b id="logo">CueSearch</b></a></li>
+                    <li class="item screen"><a href="{% url 'home' %}"><b id="logo">CueSearch</b></a></li>
                     <li class="item right">
-                    <a href="" data-toggle="modal" data-target="#myModal"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                    <a href="" data-toggle="modal" data-target="#myModal"><i class="fa fa-upload" aria-hidden="true"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
-        <span id="top"></span>  
-        <div class="content-wrap background-1">
-            <div class="content master-width clearfix">
-                {% url 'core:home' as home %}
-                {% url 'core:search' as search %}
-                {% ifequal request.path search %}
+        {% url 'core:home' as home %}
+        {% url 'core:search' as search %}
+        <span id="top"></span>
+        {% ifequal request.path search %}
+            <div class="content-wrap background-1">
+                <div class="content background_search">
                     {% include "updated_search_form.html" %}
-                {% else %}
+        {% else %}
+            <div class="content-wrap">
+                <div class="content master-width clearfix">
                     {% include "search_form.html" %}
-                {% endifequal %}
-            </div>
+        {% endifequal %}
+        </div>
         </div>
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">

@@ -9,14 +9,18 @@ from datetime import datetime
 DESC_MAX_LEN = 100000
 #sqlite db for persistence
 BANK_FILENAME = 'bank.db'
-
+FLANN_INDEX_KDTREE = 1
+FLANN_INDEX_LSH = 1
+DESCRIPTOR_KAZE = 2
 '''
 note the licensing issues with using SURF/SIFT, alternatives are FREAK, BRISK for
 feature detection
 '''
 def get_surf_des(filename):
     f = cv2.imread(filename)
-    #hessian threshold 800, 64 not 128
+    # surf = cv2.AKAZE_create('AKAZE')
+    # hessian threshold 800, 64 not 128
+
     surf = cv2.xfeatures2d.SURF_create(800, extended=False)
     kp, des = surf.detectAndCompute(f, None)
     return kp, des
@@ -29,8 +33,9 @@ class _img:
         self.imap = []
         self.r = 0
         self.descs = []
-        index_params = dict(algorithm=1,trees=4)
+        index_params = dict(algorithm = FLANN_INDEX_LSH,trees=4)
         self.flann = cv2.FlannBasedMatcher(index_params,dict())
+
 
     def add_image(self, filename, des=None):
         if des == None:
@@ -49,15 +54,17 @@ class _img:
 
     def match(self, filename, limit=20):
         kp, to_match = get_surf_des(filename)
+
         img_db = numpy.vstack(numpy.array(self.descs))
         #this should be reversed, need to update distance calculation
+
         matches = self.flann.knnMatch(img_db, to_match, k=4)
         sim = dict()
         for img in self.imap:
             sim[img['file_name']] = 0
         for i in xrange(0, len(matches)):
             match = matches[i]
-            if match[0].distance < (.6 * match[1].distance):
+            if (match[0].distance) < (match[1].distance * 0.6):
                 for img in self.imap:
                     if img['index_start'] <= i and img['index_end'] >= i:
                         sim[img['file_name']] += 1

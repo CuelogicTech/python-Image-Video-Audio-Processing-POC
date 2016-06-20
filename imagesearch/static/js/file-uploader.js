@@ -21,7 +21,6 @@ myApp.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function(file, uploadUrl){
         var fileData = new FormData();
         fileData.append('file', file)
-      
         $http.post(uploadUrl, fileData, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
@@ -31,9 +30,10 @@ myApp.service('fileUpload', ['$http', function ($http) {
             // alert(msg);
             if (msg['filename']){
                 window.location = "/core/search/"+"?f="+msg['filename'];
+                document.getElementById('txt').value  = "Choose File"
             }
             else{
-                alert('Upload a file to proceed with search')
+                alert('Select a file to proceed with search')
             }
             return false;
         })
@@ -57,6 +57,7 @@ myApp.service('bankUpload', ['$http', function ($http) {
             // alert(msg);
             if (msg['success']){
                 alert('File Uploaded');
+                document.getElementById('modal_txt').value  = "Choose File"
             }
             else{
                 alert(msg['error']);

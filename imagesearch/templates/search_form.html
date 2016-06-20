@@ -2,6 +2,6 @@
 <form class="search" name="search_form" method="get" id="searchform" >
 		<input class="search-input tab" type="text"  id="txt" value = "Choose File" 
 	       onclick ="javascript:document.getElementById('file').click();">
-    <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search" ng-click = "uploadFile()">
+    <input class="btn" type="submit" name="submit" id="searchsubmitmain" value="Search" ng-click = "uploadFile()">
 </form>
 <input id = "file" type="file" style='visibility: hidden;' name="img" file-model = "myFile" onchange="ChangeText(this, 'txt');"/>

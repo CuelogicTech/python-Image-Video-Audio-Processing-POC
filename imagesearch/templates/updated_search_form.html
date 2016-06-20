@@ -1,27 +1,31 @@
 {% load staticfiles %}
 <form class="up_search" name="search_form" method="get" id="searchform">
     <span>
-        <h1>
-            <h2 id="base_title" >ImageSearch
-            	<input class="search-input tab" type="text" value="                           Choose file" name="s" id="s" onclick ="javascript:document.getElementById('file').click();"/>
-                <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search" ng-click = "uploadFile()"/>
-            </h2>
-        </h1>
+        <h2>
+        	<input class="search-input tab" type="text" value="" name="s" id="s" onclick ="javascript:document.getElementById('file_up').click();"/>
+            <input class="btn" type="submit" name="submit" id="searchsubmit" value="Search" ng-click = "uploadFile()"/>
+        </h2>
     </span>
     {% if image_name %}
-    <div class="sbib_d" id="sb_chc0"><a class="gscp_a" href="#" style="margin: 1px; line-height: 34px; height: 35px;"><img class="gscp_f" src={{media_url}}/{{image_name}} width="41" height="30" style="margin-bottom: 5px; "><span class="gscp_e"></span><span class="gscp_c">{{image_name}}</span><span class="gscp_d">×</span></a></div>
+     <div class="sbib_d" id="sb_chc0"><a class="gscp_a" href="#" style="margin: 1px; line-height: 34px; height: 35px;"><img class="gscp_f" src={{media_url}}/{{image_name}} width="41" height="30" style="margin-bottom: 5px; "><span class="gscp_e"></span><span class="gscp_c">{{image_name}}</span><span class="gscp_d" onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); document.getElementById("s").style.textAlign=" center"; window.location = "/"; return false;'>×</span></a></div>
     {% endif %}
 </form>
-<input id = "file" type="file" style='visibility: hidden;' name="img" file-model = "myFile" onchange="ChangeText(this, 'txt');"/>
+<input id = "file_up" type="file" style='visibility: hidden;' name="img" file-model = "myFile" onchange="ChangeText(this, 's');"/>
 <div class="row row_img">
-    {% for each in image_matches %}
-    <div class="col-md-2">
-		<div class="img">
-		  <a target="_blank" href="img_fjords.jpg">
-		    <img src="/{{each.image}}">
-            <em>Similarity : {{each.similarity}}</em>
-		  </a>
-		</div>
-	</div>
-    {% endfor %}
+    {% if image_matches %}
+        {% for each in image_matches %}
+        <div class="col-md-2">
+    		<div class="img">
+    		  <a target="_blank" href="img_fjords.jpg">
+    		    <img src="/{{each.image}}">
+                <em>Similarity : {{each.similarity}}</em>
+    		  </a>
+    		</div>
+    	</div>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-4">
+            <b style="color:#aaa;float: left;margin-left:-5px">Sorry, no results found! Please try again with another image</b>
+        </div>
+    {% endif %}
 </div>

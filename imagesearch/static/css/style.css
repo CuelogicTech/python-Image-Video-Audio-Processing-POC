@@ -34,7 +34,7 @@ ol,ul { margin-left: 2em; line-height: 150%; }
 .home .content { max-width: 960px; text-align: center; background-image: none; }
 .home .content h2 { margin: 8px 0; font-size: 18px; }
 .home .search { position: relative; left: auto; top: auto; width: 100%; margin: 50px auto; text-align: center; line-height: 200%; }
-.home .search-input { color: #999; margin-bottom: 8px; min-width: 30%; height: 0%;}
+.home .search-input { color: #999; margin-bottom: 8px; min-width: 33%; height: 0%;}
 .home .search-input:focus { color: #333;}
 .home .search p { font-size: 14px; margin: 16px 0; }
 
@@ -512,7 +512,7 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
     white-space: nowrap;
     display: block;
     margin-top: -52.5px;
-    margin-left: -257px;
+    margin-left: -554px;
 }
 .sbibtd {
     line-height: 0;
@@ -527,10 +527,6 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
 }
 .tab { margin-left: 30px; }
 
-.up_search{
-    margin-top: -12%;
-    margin-left: -48%;
-}
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -559,7 +555,7 @@ body #bsap_aplink, body #bsap_aplink:hover { display: block; font-size: 12px; fo
     margin-top: -16%;
 }
 .row_img{
-    margin-left: -7%;
+    margin-left: 20px !important;
     margin-top: 4%;
 }
 div.img {
@@ -567,7 +563,7 @@ div.img {
     float: left;
     width: 180px;
     height: 150px;
-
+    padding: 4%;
 }
 
 div.img:hover {
@@ -619,8 +615,8 @@ div.desc {
     font-size: 22px;
     font-family: Cambria, Georgia, serif;
 }
-#searchsubmit{
-    margin-top: -2px;
+#searchsubmit {
+    margin-top: 1px;
     height: 34px;
 }
 .gscp_a {
@@ -628,4 +624,25 @@ div.desc {
 }
 #modal_txt{
     min-width: 76%;
+}
+
+.blog .content {
+    margin-top: 8%;
+    width: 100%;
+    max-width: 100%;
+}
+.content-wrap {
+    width: 100%;
+}
+.up_search {
+    margin-top: -9%;
+    margin-left: -42%;
+}
+.background_search{
+    background-color: #eee;
+    height: 600px;
+}
+#searchsubmitmain{
+    margin-top: -2px;
+    height: 34px;
 }
